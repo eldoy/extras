@@ -143,6 +143,11 @@ extras.read = function(path) {
   return fs.readFileSync(path, 'utf8')
 }
 
+// Write file
+extras.write = function(path, str) {
+  return fs.writeFileSync(path, str)
+}
+
 // Load yml
 extras.yaml = function(path) {
   return yaml.load(extras.read(path))
