@@ -65,7 +65,7 @@ describe('extras', () => {
     expect(Array.isArray(tree)).toBe(true)
   })
 
-  it('should give empty result if not exist', () => {
+  it('should give empty tree if not exist', () => {
     const tree = extras.tree('doesnotexist')
     expect(tree.length === 0).toBe(true)
     expect(Array.isArray(tree)).toBe(true)

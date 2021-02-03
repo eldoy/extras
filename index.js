@@ -130,7 +130,7 @@ extras.abs = function(name) {
 
 // Get name and extension
 extras.split = function(path) {
-  return p.basename(path).split('.')
+  return fspath.basename(path).split('.')
 }
 
 // Check if file exists
@@ -149,14 +149,14 @@ extras.yaml = function(path) {
 }
 
 // Read directory
-extras.dir = (path) => {
+extras.dir = function(path) {
   return fs.readdirSync(path)
     .sort((a, b) => (a.match(/^\d+/g) || a) - (b.match(/^\d+/g) || b))
     .map(x => fspath.join(path, x))
 }
 
 // Is directory?
-extras.isDir = (path) => {
+extras.isDir = function(path) {
   return fs.lstatSync(path).isDirectory()
 }
 
