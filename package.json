@@ -1,0 +1,28 @@
+{
+  "name": "extras",
+  "version": "0.1.0",
+  "description": "Large collection of Node JS functions, regexps and extras",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/eldoy/extras.git"
+  },
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "author": "Vidar Eldøy <vidar@eldoy.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cuid": "^2.1.8",
+    "js-yaml": "^4.0.0",
+    "lodash": "^4.17.20",
+    "require-from-string": "^2.0.2"
+  },
+  "devDependencies": {
+    "jest": "~26.6.3"
+  }
+}
