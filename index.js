@@ -6,6 +6,7 @@ const _ = require('lodash')
 const { v4: uuidv4 } = require('uuid')
 const cuid = require('cuid')
 const bcrypt = require('bcryptjs')
+const yaml = require('js-yaml')
 
 const extras = {}
 extras.regexp = {}
