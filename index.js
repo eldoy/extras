@@ -156,9 +156,8 @@ extras.yaml = function(path) {
 
 // Read directory
 extras.dir = function(path) {
-  return fs.readdirSync(path)
-    .sort((a, b) => (a.match(/^\d+/g) || a) - (b.match(/^\d+/g) || b))
-    .map(x => fspath.join(path, x))
+  const files = fs.readdirSync(path)
+  return extras.sortByNumber(files).map(f => fspath.join(path, f))
 }
 
 // Is directory?
@@ -183,6 +182,11 @@ extras.tree = function(root) {
   const files = []
   glob(root, files)
   return files
+}
+
+// Sort by number
+extras.sortByNumber = function(arr) {
+  return arr.sort((a, b) => (a.match(/^\d+/g) || a) - (b.match(/^\d+/g) || b))
 }
 
 module.exports = extras
