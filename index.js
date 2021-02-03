@@ -55,7 +55,7 @@ extras.isBoolean = function(v) {
   return ['false', 'null', 'NaN', 'undefined', '0'].includes(v) ? false : !!v
 }
 
-/** Format and interpolate strings */
+// Format and interpolate strings
 extras.format = function(str, ...args) {
   for (let i = 0; i < args.length; i++) {
     let val = args[i]
@@ -69,7 +69,7 @@ extras.format = function(str, ...args) {
   return str
 }
 
-/** Inspect object */
+// Inspect object
 extras.inspect = function(obj, options = {}) {
   const _obj = _.cloneDeep(obj)
   if (options.exclude) {
@@ -84,7 +84,7 @@ extras.inspect = function(obj, options = {}) {
   return result
 }
 
-/** Trim strings in object */
+// Trim strings in object
 extras.trim = function(obj) {
   for (const key in obj) {
     if (typeof obj[key] === 'object') {
@@ -95,7 +95,7 @@ extras.trim = function(obj) {
   }
 }
 
-/** Transform JSON string nodes to Javascript native objects */
+// Transform JSON string nodes to Javascript native objects
 extras.transform = function(node) {
   for (const k in node) {
     if (node[k] && typeof node[k] === 'object') {
@@ -111,7 +111,7 @@ extras.transform = function(node) {
   }
 }
 
-/** Convert values based on type */
+// Convert values based on type
 extras.convert = function(v, type) {
   switch (type) {
     case 'string': return String(v)
@@ -119,7 +119,7 @@ extras.convert = function(v, type) {
     case 'integer': return parseInt(v)
     case 'float': return parseFloat(v)
     case 'date': return new Date(v)
-    case 'boolean': return extras.isBooleanLike(v)
+    case 'boolean': return extras.isBoolean(v)
     default: return v
   }
 }
@@ -166,7 +166,7 @@ extras.isDir = function(path) {
   return fs.lstatSync(path).isDirectory()
 }
 
-/** Directory tree as flat array */
+// Directory tree as flat array
 extras.tree = function(root) {
   root = extras.abs(root)
   if (!extras.exist(root)) return []
