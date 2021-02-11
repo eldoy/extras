@@ -1,5 +1,6 @@
 const fs = require('fs')
 const fspath = require('path')
+const os = require('os')
 const util = require('util')
 const crypto = require('crypto')
 const _ = require('lodash')
@@ -149,9 +150,14 @@ extras.write = function(path, str) {
   return fs.writeFileSync(path, str)
 }
 
-// Load yml
-extras.yaml = function(path) {
+// Read yaml file
+extras.ryml = function(path) {
   return yaml.load(extras.read(path))
+}
+
+// Write yaml file
+extras.wyml = function(path, obj) {
+  return extras.write(path, yaml.dump(obj))
 }
 
 // Read directory
@@ -163,6 +169,16 @@ extras.dir = function(path) {
 // Is directory?
 extras.isDir = function(path) {
   return fs.lstatSync(path).isDirectory()
+}
+
+// Resolve path
+extras.resolve = function(path) {
+  if (path.startsWith('~')) {
+    path = path.replace('~', os.homedir())
+  } else if (!path.startsWith(fspath.sep)) {
+    path = fspath.join(process.cwd(), path)
+  }
+  return path
 }
 
 // Directory tree as flat array
