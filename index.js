@@ -191,12 +191,20 @@ extras.copy = function(from, to) {
 
 // Is directory?
 extras.isDir = function(file) {
-  return fs.lstatSync(file).isDirectory()
+  try {
+    return fs.lstatSync(file).isDirectory()
+  } catch (e) {
+    return false
+  }
 }
 
 // Is file?
 extras.isFile = function(file) {
-  return fs.lstatSync(file).isFile()
+  try {
+    return fs.lstatSync(file).isFile()
+  } catch (e) {
+    return false
+  }
 }
 
 // Run command
