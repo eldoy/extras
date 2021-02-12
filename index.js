@@ -133,45 +133,53 @@ extras.split = function(file) {
 
 // Check if file exists
 extras.exist = function(file) {
-  return file ? fs.existsSync(file) : false
+  file = extras.resolve(file)
+  return fs.existsSync(file)
 }
 
 // Read file
 extras.read = function(file) {
-  return fs.readFileSync(file, 'utf8')
+  file = extras.resolve(file)
+  const content = fs.readFileSync(file, 'utf8')
+  if (file.endsWith('.json')) {
+    return JSON.parse(content)
+  } else if (file.endsWith('.yml')) {
+    return yaml.load(content) || {}
+  }
+  return content
 }
 
 // Write file
-extras.write = function(file, str) {
-  return fs.writeFileSync(file, str)
+extras.write = function(file, content) {
+  file = extras.resolve(file)
+  if (_.isPlainObject(content)) {
+    if (file.endsWith('.json')) {
+      content = JSON.stringify(content)
+    } else if (file.endsWith('.yml')) {
+      content = yaml.dump(content)
+    }
+  }
+  return fs.writeFileSync(file, content)
 }
 
 // Append to file
-extras.append = function(name, content) {
-  return fs.appendFileSync(name, content)
+extras.append = function(file, content) {
+  file = extras.resolve(file)
+  return fs.appendFileSync(file, content)
 }
 
 // Edit file
 extras.edit = function(file, fn) {
+  file = extras.resolve(file)
   const content = extras.read(file)
   const result = fn(content) || ''
   extras.write(file, result)
 }
 
-// Read yaml file
-extras.ryml = function(file) {
-  return yaml.load(extras.read(file)) || {}
-}
-
-// Write yaml file
-extras.wyml = function(file, obj) {
-  return extras.write(file, yaml.dump(obj))
-}
-
 // Read directory
 extras.dir = function(file) {
-  const files = fs.readdirSync(file)
-  return extras.sortByNumber(files).map(f => path.join(file, f))
+  file = extras.resolve(file)
+  return fs.readdirSync(file)
 }
 
 // Copy files
@@ -187,8 +195,8 @@ extras.isDir = function(file) {
 }
 
 // Is file?
-extras.isFile = function(name) {
-  return fs.lstatSync(name).isFile()
+extras.isFile = function(file) {
+  return fs.lstatSync(file).isFile()
 }
 
 // Run command
@@ -197,17 +205,19 @@ extras.run = function(command) {
 }
 
 // Make directory
-extras.mkdir = function(...names) {
-  return sh.mkdir('-p', ...names)
+extras.mkdir = function(...dirs) {
+  return sh.mkdir('-p', ...dirs)
 }
 
 // Remove directory
-extras.rmdir = function(...names) {
-  return sh.rm('-rf', ...names)
+extras.rmdir = function(...dirs) {
+  return sh.rm('-rf', ...dirs)
 }
 
 // Rename file
 extras.rename = function(from, to) {
+  from = extras.resolve(from)
+  to = extras.resolve(to)
   if (extras.exist(from)) {
     return sh.mv(from, to)
   }
@@ -224,22 +234,25 @@ extras.resolve = function(...dirs) {
   return path.resolve(file)
 }
 
+extras.walk = function(dir, fn) {
+  extras.dir(dir).forEach(f => {
+    const file = path.join(dir, f)
+    if(extras.isDir(file)){
+      extras.walk(file, fn)
+    } else {
+      fn(file, dir)
+    }
+  })
+}
+
 // Directory tree as flat array
 extras.tree = function(root) {
   root = extras.resolve(root)
   if (!extras.exist(root)) return []
-  function glob(dir, files) {
-    fs.readdirSync(dir).forEach(file => {
-      const subpath = path.join(dir, file)
-      if(extras.isDir(subpath)){
-        glob(subpath, files)
-      } else {
-        files.push(subpath)
-      }
-    })
-  }
   const files = []
-  glob(root, files)
+  extras.walk(root, function(file) {
+    files.push(file)
+  })
   return files
 }
 
