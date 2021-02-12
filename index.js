@@ -191,6 +191,7 @@ extras.copy = function(from, to) {
 
 // Is directory?
 extras.isDir = function(file) {
+  file = extras.resolve(file)
   try {
     return fs.lstatSync(file).isDirectory()
   } catch (e) {
@@ -200,6 +201,7 @@ extras.isDir = function(file) {
 
 // Is file?
 extras.isFile = function(file) {
+  file = extras.resolve(file)
   try {
     return fs.lstatSync(file).isFile()
   } catch (e) {
