@@ -152,7 +152,7 @@ extras.write = function(path, str) {
 
 // Read yaml file
 extras.ryml = function(path) {
-  return yaml.load(extras.read(path))
+  return yaml.load(extras.read(path)) || {}
 }
 
 // Write yaml file
