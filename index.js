@@ -1,5 +1,5 @@
 const fs = require('fs')
-const fspath = require('path')
+const path = require('path')
 const os = require('os')
 const util = require('util')
 const crypto = require('crypto')
@@ -126,29 +126,24 @@ extras.convert = function(v, type) {
   }
 }
 
-// Get absolute path
-extras.abs = function(name) {
-  return fspath.join(process.cwd(), name)
-}
-
 // Get name and extension
-extras.split = function(path) {
-  return fspath.basename(path).split('.')
+extras.split = function(file) {
+  return path.basename(file).split('.')
 }
 
 // Check if file exists
-extras.exist = function(path) {
-  return path ? fs.existsSync(path) : false
+extras.exist = function(file) {
+  return file ? fs.existsSync(file) : false
 }
 
 // Read file
-extras.read = function(path) {
-  return fs.readFileSync(path, 'utf8')
+extras.read = function(file) {
+  return fs.readFileSync(file, 'utf8')
 }
 
 // Write file
-extras.write = function(path, str) {
-  return fs.writeFileSync(path, str)
+extras.write = function(file, str) {
+  return fs.writeFileSync(file, str)
 }
 
 // Append to file
@@ -157,24 +152,24 @@ extras.append = function(name, content) {
 }
 
 // Read yaml file
-extras.ryml = function(path) {
-  return yaml.load(extras.read(path)) || {}
+extras.ryml = function(file) {
+  return yaml.load(extras.read(file)) || {}
 }
 
 // Write yaml file
-extras.wyml = function(path, obj) {
-  return extras.write(path, yaml.dump(obj))
+extras.wyml = function(file, obj) {
+  return extras.write(file, yaml.dump(obj))
 }
 
 // Read directory
-extras.dir = function(path) {
-  const files = fs.readdirSync(path)
-  return extras.sortByNumber(files).map(f => fspath.join(path, f))
+extras.dir = function(file) {
+  const files = fs.readdirSync(file)
+  return extras.sortByNumber(files).map(f => path.join(file, f))
 }
 
 // Is directory?
-extras.isDir = function(path) {
-  return fs.lstatSync(path).isDirectory()
+extras.isDir = function(file) {
+  return fs.lstatSync(file).isDirectory()
 }
 
 // Is file?
@@ -206,22 +201,22 @@ extras.rename = function(from, to) {
 
 // Resolve path
 extras.resolve = function(...dirs) {
-  let path = dirs.join(fspath.sep)
-  if (path.startsWith('~')) {
-    path = path.replace('~', os.homedir())
-  } else if (!path.startsWith(fspath.sep)) {
-    path = fspath.join(process.cwd(), path)
+  let file = dirs.join(path.sep)
+  if (file.startsWith('~')) {
+    file = file.replace('~', os.homedir())
+  } else if (!file.startsWith(path.sep)) {
+    file = path.join(process.cwd(), file)
   }
-  return fspath.resolve(path)
+  return path.resolve(file)
 }
 
 // Directory tree as flat array
 extras.tree = function(root) {
-  root = extras.abs(root)
+  root = extras.resolve(root)
   if (!extras.exist(root)) return []
-  function glob(path, files) {
-    fs.readdirSync(path).forEach(file => {
-      const subpath = fspath.join(path, file)
+  function glob(dir, files) {
+    fs.readdirSync(dir).forEach(file => {
+      const subpath = path.join(dir, file)
       if(extras.isDir(subpath)){
         glob(subpath, files)
       } else {
