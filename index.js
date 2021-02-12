@@ -151,6 +151,13 @@ extras.append = function(name, content) {
   return fs.appendFileSync(name, content)
 }
 
+// Edit file
+extras.edit = function(file, fn) {
+  const content = extras.read(file)
+  const result = fn(content) || ''
+  extras.write(file, result)
+}
+
 // Read yaml file
 extras.ryml = function(file) {
   return yaml.load(extras.read(file)) || {}
@@ -165,6 +172,13 @@ extras.wyml = function(file, obj) {
 extras.dir = function(file) {
   const files = fs.readdirSync(file)
   return extras.sortByNumber(files).map(f => path.join(file, f))
+}
+
+// Copy files
+extras.copy = function(from, to) {
+  from = extras.resolve(from)
+  to = extras.resolve(to)
+  return shell.cp('-R', from, to)
 }
 
 // Is directory?
