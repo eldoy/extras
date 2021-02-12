@@ -1,4 +1,5 @@
 const extras = require('../index.js')
+const os = require('os')
 
 describe('extras', () => {
   it('should format a string', async () => {
@@ -60,14 +61,28 @@ describe('extras', () => {
   })
 
   it('should show a directory tree', () => {
-    const tree = extras.tree('test')
+    let tree = extras.tree('test')
     expect(tree.length > 0).toBe(true)
     expect(Array.isArray(tree)).toBe(true)
   })
 
   it('should give empty tree if not exist', () => {
-    const tree = extras.tree('doesnotexist')
+    let tree = extras.tree('doesnotexist')
     expect(tree.length === 0).toBe(true)
     expect(Array.isArray(tree)).toBe(true)
+  })
+
+  it('should resolve paths', async () => {
+    let result = extras.resolve(__dirname)
+    expect(result).toBe(__dirname)
+
+    result = extras.resolve('..', 'test')
+    expect(result.endsWith('/test')).toBe(true)
+
+    result = extras.resolve('~')
+    expect(result).toBe(os.homedir())
+
+    result = extras.resolve('test')
+    expect(result.endsWith('/test')).toBe(true)
   })
 })

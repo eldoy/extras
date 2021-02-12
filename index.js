@@ -8,6 +8,7 @@ const { v4: uuidv4 } = require('uuid')
 const cuid = require('cuid')
 const bcrypt = require('bcryptjs')
 const yaml = require('js-yaml')
+const sh = require('shelljs')
 
 const extras = {}
 extras.regexp = {}
@@ -150,6 +151,11 @@ extras.write = function(path, str) {
   return fs.writeFileSync(path, str)
 }
 
+// Append to file
+extras.append = function(name, content) {
+  return fs.appendFileSync(name, content)
+}
+
 // Read yaml file
 extras.ryml = function(path) {
   return yaml.load(extras.read(path)) || {}
@@ -171,14 +177,42 @@ extras.isDir = function(path) {
   return fs.lstatSync(path).isDirectory()
 }
 
+// Is file?
+extras.isFile = function(name) {
+  return fs.lstatSync(name).isFile()
+}
+
+// Run command
+extras.run = function(command) {
+  return sh.exec(command)
+}
+
+// Make directory
+extras.mkdir = function(...names) {
+  return sh.mkdir('-p', ...names)
+}
+
+// Remove directory
+extras.rmdir = function(...names) {
+  return sh.rm('-rf', ...names)
+}
+
+// Rename file
+extras.rename = function(from, to) {
+  if (extras.exist(from)) {
+    return sh.mv(from, to)
+  }
+}
+
 // Resolve path
-extras.resolve = function(path) {
+extras.resolve = function(...dirs) {
+  let path = dirs.join(fspath.sep)
   if (path.startsWith('~')) {
     path = path.replace('~', os.homedir())
   } else if (!path.startsWith(fspath.sep)) {
     path = fspath.join(process.cwd(), path)
   }
-  return path
+  return fspath.resolve(path)
 }
 
 // Directory tree as flat array
