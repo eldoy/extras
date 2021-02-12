@@ -226,7 +226,9 @@ extras.rename = function(from, to) {
 // Resolve path
 extras.resolve = function(...dirs) {
   let file = dirs.join(path.sep)
-  if (file.startsWith('~')) {
+  if (file.startsWith('.')) {
+    file = file.replace('.', process.cwd())
+  } else if (file.startsWith('~')) {
     file = file.replace('~', os.homedir())
   } else if (!file.startsWith(path.sep)) {
     file = path.join(process.cwd(), file)
