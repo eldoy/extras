@@ -186,7 +186,7 @@ extras.dir = function(file) {
 extras.copy = function(from, to) {
   from = extras.resolve(from)
   to = extras.resolve(to)
-  return shell.cp('-R', from, to)
+  return sh.cp('-R', from, to)
 }
 
 // Is directory?
