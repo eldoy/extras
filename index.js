@@ -10,6 +10,8 @@ const bcrypt = require('bcryptjs')
 const yaml = require('js-yaml')
 const sh = require('shelljs')
 
+const NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
+
 const extras = {}
 extras.regexp = {}
 extras.regexp.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -140,10 +142,12 @@ extras.exist = function(file) {
 // Read file
 extras.read = function(file) {
   file = extras.resolve(file)
+  const [name, ext] = extras.split(file)
+  if (NODE_EXTENSIONS.includes(ext)) {
+    return require(file)
+  }
   const content = fs.readFileSync(file, 'utf8')
-  if (file.endsWith('.json')) {
-    return JSON.parse(content)
-  } else if (file.endsWith('.yml')) {
+  if (file.endsWith('.yml')) {
     return yaml.load(content) || {}
   }
   return content
