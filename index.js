@@ -129,8 +129,11 @@ extras.convert = function(v, type) {
 }
 
 // Get name and extension
-extras.split = function(file) {
-  return path.basename(file).split('.')
+extras.name = function(file) {
+  const name = path.basename(file)
+  const base = name.split('.').slice(0, -1).join('.')
+  const ext = name.split('.').slice(-1).join('')
+  return [base, ext, name]
 }
 
 // Check if file exists
@@ -142,7 +145,7 @@ extras.exist = function(file) {
 // Read file
 extras.read = function(file) {
   file = extras.resolve(file)
-  const [name, ext] = extras.split(file)
+  const [base, ext] = extras.name(file)
   if (NODE_EXTENSIONS.includes(ext)) {
     return require(file)
   }
