@@ -183,7 +183,8 @@ extras.edit = function(file, fn) {
 // Read directory
 extras.dir = function(file) {
   file = extras.resolve(file)
-  return fs.readdirSync(file)
+  const files = fs.readdirSync(file)
+  return extras.sortByNumber(files).map(f => path.join(file, f))
 }
 
 // Copy files
