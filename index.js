@@ -273,8 +273,11 @@ extras.tree = function(root) {
 }
 
 // Sort by number
-extras.sortByNumber = function(arr) {
-  return arr.sort((a, b) => (a.match(/^\d+/g) || a) - (b.match(/^\d+/g) || b))
+extras.sortByNumber = function(arr, fn) {
+  if (!fn) {
+    fn = (a, b) => (a.match(/^\d+/g) || a) - (b.match(/^\d+/g) || b)
+  }
+  return arr.sort(fn)
 }
 
 module.exports = extras

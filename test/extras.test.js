@@ -99,4 +99,15 @@ describe('extras', () => {
     result = extras.read('test/assets/file.js')
     expect(result).toEqual({ hello: 1 })
   })
+
+  it('should sort by number', () => {
+    let t = ['11-a', '1000-b', '10-c']
+    let result = extras.sortByNumber(t.slice())
+    expect(result).toEqual(['10-c', '11-a', '1000-b'])
+
+    result = extras.sortByNumber(t.slice(), function(a, b) {
+      return (b.match(/^\d+/g) || b) - (a.match(/^\d+/g) || a)
+    })
+    expect(result).toEqual(['10-c', '11-a', '1000-b'].reverse())
+  })
 })
