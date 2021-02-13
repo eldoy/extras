@@ -2,7 +2,7 @@ const extras = require('../index.js')
 const os = require('os')
 
 describe('extras', () => {
-  it('should format a string', async () => {
+  it('should format a string', () => {
     let result = extras.format('hello')
     expect(result).toBe('hello')
 
@@ -31,7 +31,7 @@ describe('extras', () => {
     expect(result).toBe('hello true')
   })
 
-  it('should should transform a string', async () => {
+  it('should should transform a string', () => {
     let params = { hello: 'something' }
     extras.transform(params)
     expect(params.hello).toBe('something')
@@ -49,12 +49,12 @@ describe('extras', () => {
     expect(typeof params.hello.getMonth).toBe('function')
   })
 
-  it('should md5 hash a string', async () => {
+  it('should md5 hash a string', () => {
     let result = extras.md5('hello')
     expect(result).toBe('5d41402abc4b2a76b9719d911017c592')
   })
 
-  it('should generate a uuid', async () => {
+  it('should generate a uuid', () => {
     let result = extras.uuid()
     expect(typeof result).toBe('string')
     expect(result.length).toBe(36)
@@ -72,7 +72,7 @@ describe('extras', () => {
     expect(Array.isArray(tree)).toBe(true)
   })
 
-  it('should resolve paths', async () => {
+  it('should resolve paths', () => {
     let result = extras.resolve(__dirname)
     expect(result).toBe(__dirname)
 
@@ -84,5 +84,19 @@ describe('extras', () => {
 
     result = extras.resolve('test')
     expect(result.endsWith('/test')).toBe(true)
+  })
+
+  it('should read files', () => {
+    let result = extras.read('test/assets/file.txt')
+    expect(result).toEqual('hello')
+
+    result = extras.read('test/assets/file.yml')
+    expect(result).toEqual({ hello: 1 })
+
+    result = extras.read('test/assets/file.json')
+    expect(result).toEqual({ hello: 1 })
+
+    result = extras.read('test/assets/file.js')
+    expect(result).toEqual({ hello: 1 })
   })
 })
