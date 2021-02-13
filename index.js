@@ -31,6 +31,10 @@ extras.md5 = function(str) {
   return crypto.createHash('md5').update(str).digest('hex')
 }
 
+extras.hex = function(size = 20) {
+  return crypto.randomBytes(size).toString('hex')
+}
+
 extras.compare = function(plain, hash) {
   return bcrypt.compareSync(String(plain), String(hash))
 }
