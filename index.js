@@ -270,7 +270,7 @@ extras.tree = function(root) {
   extras.walk(root, function(file) {
     files.push(file)
   })
-  return files
+  return extras.sortByNumber(files)
 }
 
 // Sort by number
