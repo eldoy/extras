@@ -147,14 +147,14 @@ extras.exist = function(file) {
 }
 
 // Read file
-extras.read = function(file) {
+extras.read = function(file, encoding) {
   file = extras.resolve(file)
   const [base, ext] = extras.name(file)
-  if (NODE_EXTENSIONS.includes(ext)) {
+  if (!encoding && NODE_EXTENSIONS.includes(ext)) {
     return require(file)
   }
-  const content = fs.readFileSync(file, 'utf8')
-  if (file.endsWith('.yml')) {
+  const content = fs.readFileSync(file, encoding || 'utf8')
+  if (!encoding && file.endsWith('.yml')) {
     return yaml.load(content) || {}
   }
   return content
