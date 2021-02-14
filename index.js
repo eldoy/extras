@@ -221,8 +221,8 @@ extras.isFile = function(file) {
 }
 
 // Run command
-extras.run = function(command) {
-  return sh.exec(command)
+extras.run = function(command, options = {}) {
+  return sh.exec(command, options)
 }
 
 // Make directory
