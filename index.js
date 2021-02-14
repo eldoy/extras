@@ -182,7 +182,7 @@ extras.append = function(file, content) {
 // Edit file
 extras.edit = function(file, fn) {
   file = extras.resolve(file)
-  const content = extras.read(file)
+  const content = extras.read(file, 'utf8')
   const result = fn(content) || ''
   extras.write(file, result)
 }
