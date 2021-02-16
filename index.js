@@ -140,6 +140,22 @@ extras.name = function(file) {
   return [base, ext, name]
 }
 
+// Turn a string into a valid slug for web addresses
+extras.slug = function (string) {
+  const a = 'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;'
+  const b = 'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------'
+  const p = new RegExp(a.split('').join('|'), 'g')
+
+  return string.toString().toLowerCase()
+  .replace(/\s+/g, '-')
+  .replace(p, c => b.charAt(a.indexOf(c)))
+  .replace(/&/g, '-and-')
+  .replace(/[^\w\-]+/g, '')
+  .replace(/\-\-+/g, '-')
+  .replace(/^-+/, '')
+  .replace(/-+$/, '')
+}
+
 // Check if file exists
 extras.exist = function(file) {
   file = extras.resolve(file)
