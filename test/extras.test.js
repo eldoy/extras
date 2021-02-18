@@ -111,7 +111,24 @@ describe('extras', () => {
     expect(result).toEqual(['10-c', '11-a', '1000-b'].reverse())
   })
 
-  it('should get a file name and extension', async () => {
+  it('should strip a string', () => {
+    let result = extras.strip('hello')
+    expect(result).toBe('hello')
+
+    result = extras.strip(' hello ')
+    expect(result).toBe('hello')
+
+    result = extras.strip('hello what')
+    expect(result).toBe('hello what')
+
+    result = extras.strip('hello what | nesten', '|')
+    expect(result).toBe('hello what|nesten')
+
+    result = extras.strip('hello what\n\n linje  ')
+    expect(result).toBe('hello what\n\nlinje')
+  })
+
+  it('should get a file name and extension', () => {
     const [base1, ext1, name1] = extras.name('/a/b/test.js')
     expect(base1).toBe('test')
     expect(ext1).toBe('js')

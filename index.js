@@ -103,6 +103,10 @@ extras.trim = function(obj) {
   }
 }
 
+extras.strip = function(str, sep = '\n') {
+  return str.split(sep).map(s => s.trim()).join(sep)
+}
+
 // Transform JSON string nodes to Javascript native objects
 extras.transform = function(node) {
   for (const k in node) {
