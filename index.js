@@ -103,6 +103,7 @@ extras.trim = function(obj) {
   }
 }
 
+// Strip strings, multi-line support
 extras.strip = function(str, sep = '\n') {
   return str.split(sep).map(s => s.trim()).join(sep)
 }
