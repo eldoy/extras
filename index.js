@@ -166,11 +166,11 @@ extras.exist = function(file) {
 extras.read = function(file, encoding) {
   file = extras.resolve(file)
   const [base, ext] = extras.name(file)
-  if (!encoding && NODE_EXTENSIONS.includes(ext)) {
+  if (NODE_EXTENSIONS.includes(encoding) || !encoding && NODE_EXTENSIONS.includes(ext)) {
     return require(file)
   }
   const content = fs.readFileSync(file, encoding || 'utf8')
-  if (!encoding && file.endsWith('.yml')) {
+  if (encoding == 'yml' || !encoding && ext == 'yml') {
     return yaml.load(content) || {}
   }
   return content
