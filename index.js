@@ -310,7 +310,7 @@ extras.sortByNumber = function(arr, fn) {
 
 // Sleep
 extras.sleep = function(s = 1) {
-  return new Promise(r => setTimeout(r, s / 1000))
+  return new Promise(r => setTimeout(r, s * 1000))
 }
 
 module.exports = extras
