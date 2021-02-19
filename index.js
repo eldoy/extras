@@ -146,7 +146,7 @@ extras.name = function(file) {
 }
 
 // Turn a string into a valid slug for web addresses
-extras.slug = function (string) {
+extras.slug = function(string) {
   const a = 'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;'
   const b = 'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------'
   const p = new RegExp(a.split('').join('|'), 'g')
@@ -306,6 +306,11 @@ extras.sortByNumber = function(arr, fn) {
     fn = (a, b) => (a.match(/^\d+/g) || a) - (b.match(/^\d+/g) || b)
   }
   return arr.sort(fn)
+}
+
+// Sleep
+extras.sleep = function(ms = 1000) {
+  return new Promise(r => setTimeout(r, ms))
 }
 
 module.exports = extras
