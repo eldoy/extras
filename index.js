@@ -214,6 +214,11 @@ extras.exit = function(msg, code = 1) {
   process.exit(code)
 }
 
+// Get command input
+extras.get function(cmd) {
+  return extras.run(cmd, { silent: true }).stdout.trim()
+}
+
 // Read directory
 extras.dir = function(file) {
   file = extras.resolve(file)
