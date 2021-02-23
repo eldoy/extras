@@ -208,6 +208,12 @@ extras.edit = function(file, fn) {
   extras.write(file, result)
 }
 
+// Exit program
+extras.exit = function(msg, code = 1) {
+  console.log(msg)
+  process.exit(code)
+}
+
 // Read directory
 extras.dir = function(file) {
   file = extras.resolve(file)
