@@ -215,7 +215,7 @@ extras.exit = function(msg, code = 1) {
 }
 
 // Get command input
-extras.get function(cmd) {
+extras.get = function(cmd) {
   return extras.run(cmd, { silent: true }).stdout.trim()
 }
 
