@@ -140,8 +140,12 @@ extras.convert = function(v, type) {
 // Get base and extension
 extras.basext = function(file) {
   const name = path.basename(file)
-  const base = name.split('.').slice(0, -1).join('.')
-  const ext = name.split('.').slice(-1).join('')
+  let base = name
+  let ext = ''
+  if (name.includes('.')) {
+    base = name.split('.').slice(0, -1).join('.')
+    ext = name.split('.').slice(-1).join('')
+  }
   return [base, ext, name]
 }
 

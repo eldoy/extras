@@ -138,5 +138,10 @@ describe('extras', () => {
     expect(base2).toBe('hello.test')
     expect(ext2).toBe('yml')
     expect(name2).toBe('hello.test.yml')
+
+    const [base3, ext3, name3] = extras.basext('/src/waveorb-generate')
+    expect(base3).toBe('waveorb-generate')
+    expect(ext3).toBe('')
+    expect(name3).toBe('waveorb-generate')
   })
 })
