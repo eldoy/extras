@@ -129,12 +129,12 @@ describe('extras', () => {
   })
 
   it('should get a file name and extension', () => {
-    const [base1, ext1, name1] = extras.name('/a/b/test.js')
+    const [base1, ext1, name1] = extras.basext('/a/b/test.js')
     expect(base1).toBe('test')
     expect(ext1).toBe('js')
     expect(name1).toBe('test.js')
 
-    const [base2, ext2, name2] = extras.name('/a/b/hello.test.yml')
+    const [base2, ext2, name2] = extras.basext('/a/b/hello.test.yml')
     expect(base2).toBe('hello.test')
     expect(ext2).toBe('yml')
     expect(name2).toBe('hello.test.yml')
