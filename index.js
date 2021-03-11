@@ -59,7 +59,7 @@ extras.isURL = function(str) {
   return extras.regexp.url.test(String(str))
 }
 
-extras.isBoolean = function(v) {
+extras.parseBool = function(v) {
   return ['false', 'null', 'NaN', 'undefined', '0'].includes(v) ? false : !!v
 }
 
@@ -132,7 +132,7 @@ extras.convert = function(v, type) {
     case 'integer': return parseInt(v)
     case 'float': return parseFloat(v)
     case 'date': return new Date(v)
-    case 'boolean': return extras.isBoolean(v)
+    case 'boolean': return extras.parseBool(v)
     default: return v
   }
 }
