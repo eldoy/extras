@@ -294,6 +294,7 @@ extras.resolve = function(...dirs) {
   return path.resolve(file)
 }
 
+// Walk directory tree
 extras.walk = function(dir, fn) {
   extras.dir(dir).forEach(f => {
     const file = path.join(dir, f)
