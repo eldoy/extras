@@ -189,7 +189,7 @@ extras.read = function(file, encoding) {
 // Write file
 extras.write = function(file, content) {
   file = extras.resolve(file)
-  if (_.isPlainObject(content)) {
+  if (Array.isArray(content) || _.isPlainObject(content)) {
     if (file.endsWith('.json')) {
       content = JSON.stringify(content)
     } else if (file.endsWith('.yml')) {
