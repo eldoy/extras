@@ -141,9 +141,9 @@ extras.convert = function(v, type) {
 // Convert object to dot notation
 extras.dot = function(obj, sep = '.') {
   const dotted = {}
-  function build(obj, trail) {
+  function build(obj, str) {
     for(var key in obj) {
-      trail = trail ? `${trail}${sep}${key}` : key
+      const trail = str ? `${str}${sep}${key}` : key
       if(obj[key] && typeof obj[key] == 'object') {
         build(obj[key], trail)
       } else {
