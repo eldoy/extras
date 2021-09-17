@@ -138,6 +138,23 @@ extras.convert = function(v, type) {
   }
 }
 
+// Convert object to dot notation
+extras.dot = function(obj, sep = '.') {
+  const dotted = {}
+  function build(obj, trail) {
+    for(var key in obj) {
+      trail = trail ? `${trail}${sep}${key}` : key
+      if(obj[key] && typeof obj[key] == 'object') {
+        build(obj[key], trail)
+      } else {
+        dotted[trail] = obj[key]
+      }
+    }
+  }
+  build(obj)
+  return dotted
+}
+
 // Get base and extension
 extras.basext = function(file) {
   const name = path.basename(file)

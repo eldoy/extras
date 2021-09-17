@@ -144,4 +144,13 @@ describe('extras', () => {
     expect(ext3).toBe('')
     expect(name3).toBe('waveorb-generate')
   })
+
+  it('should convert an object to dot notation', async () => {
+    var obj = { a: { b: { c: 1 } } }
+    const res = extras.dot(obj)
+    expect(res['a.b.c']).toBe(1)
+
+    const res2 = extras.dot(obj, '/')
+    expect(res2['a/b/c']).toBe(1)
+  })
 })
