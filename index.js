@@ -9,6 +9,7 @@ const cuid = require('cuid')
 const bcrypt = require('bcryptjs')
 const yaml = require('js-yaml')
 const sh = require('shelljs')
+const readline = require('readline')
 
 const NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
@@ -239,6 +240,19 @@ extras.exit = function(msg, code = 1) {
 // Get command input
 extras.get = function(cmd) {
   return extras.run(cmd, { silent: true }).stdout.trim()
+}
+
+// Get terminal input
+extras.input = async function(str = '> ', opt = {}) {
+  opt = {
+    input: process.stdin,
+    output: process.stdout,
+    ...opt
+  }
+  const rl = readline.createInterface(opt)
+  const answer = await new Promise(r => rl.question(str, r))
+  rl.close()
+  return answer
 }
 
 // Read directory
