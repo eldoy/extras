@@ -24,6 +24,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "~27.2.0"
+    "jest": "~27.4.5"
   }
 }
