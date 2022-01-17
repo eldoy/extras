@@ -178,7 +178,7 @@ extras.slug = function(string) {
   return string.toString().toLowerCase()
   .replace(/\s+/g, '-')
   .replace(p, c => b.charAt(a.indexOf(c)))
-  .replace(/&/g, '-and-')
+  .replace(/&/g, '-')
   .replace(/[^\w\-]+/g, '')
   .replace(/\-\-+/g, '-')
   .replace(/^-+/, '')
