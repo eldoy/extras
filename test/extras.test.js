@@ -145,11 +145,11 @@ describe('extras', () => {
     expect(name3).toBe('waveorb-generate')
   })
 
-  it('should convert an object to dot notation', async () => {
-    var obj = { a: { b: { c: 1 } } }
+  it.only('should convert an object to dot notation', async () => {
+    var obj = { a: { b: { c: 1, d: /regex/ } } }
     const res = extras.dot(obj)
     expect(res['a.b.c']).toBe(1)
-
+    expect(res['a.b.d']).toBeDefined()
     const res2 = extras.dot(obj, '/')
     expect(res2['a/b/c']).toBe(1)
   })
