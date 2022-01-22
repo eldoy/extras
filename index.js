@@ -146,7 +146,7 @@ extras.dot = function(obj, sep = '.') {
   function build(obj, str) {
     for(var key in obj) {
       const trail = str ? `${str}${sep}${key}` : key
-      if(_.isArray(obj[key]) || _.isPlainObject(obj[key])) {
+      if(_.isPlainObject(obj[key])) {
         build(obj[key], trail)
       } else {
         dotted[trail] = obj[key]
