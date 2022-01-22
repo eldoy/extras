@@ -157,6 +157,23 @@ extras.dot = function(obj, sep = '.') {
   return dotted
 }
 
+// Unpack object with dot notation
+extras.undot = function(obj, sep = '.') {
+  const un = {}
+  function build(obj, str) {
+    for (const key in obj) {
+      const trail = str ? `${str}${sep}${key}` : key
+      if (_.isPlainObject(obj[key])) {
+        build(obj[key], trail)
+      } else {
+        _.set(un, trail, obj[key])
+      }
+    }
+  }
+  build(obj)
+  return un
+}
+
 // Get base and extension
 extras.basext = function(file) {
   const name = path.basename(file)

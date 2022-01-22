@@ -153,4 +153,28 @@ describe('extras', () => {
     const res2 = extras.dot(obj, '/')
     expect(res2['a/b/c']).toBe(1)
   })
+
+  it('should undot a dotted object', async () => {
+    let result = extras.undot({})
+    expect(result).toEqual({})
+
+    result = extras.undot({ name: 'hello' })
+    expect(result).toEqual({ name: 'hello' })
+
+    result = extras.undot({ 'name.harald': 'hello' })
+    expect(result).toEqual({ name: { harald: 'hello' } })
+
+    result = extras.undot({
+      names: {
+        'harald.email': 'hello@test.no'
+      }
+    })
+    expect(result).toEqual({
+      names: {
+        harald: {
+          email: 'hello@test.no'
+        }
+      }
+    })
+  })
 })
