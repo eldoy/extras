@@ -177,4 +177,22 @@ describe('extras', () => {
       }
     })
   })
+
+  it('should clean an object', async function() {
+    let obj = {
+      a: null,
+      b: {
+        c: null,
+        d: 1
+      },
+      e: [1, 2, null, 3]
+    }
+    obj = extras.clean(obj)
+    expect(typeof obj.a).toBe('undefined')
+    expect(typeof obj.b.c).toBe('undefined')
+    expect(obj.b.d).toBe(1)
+    expect(obj.e[0]).toBe(1)
+    expect(obj.e[1]).toBe(2)
+    expect(obj.e[2]).toBe(3)
+  })
 })

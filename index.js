@@ -174,6 +174,19 @@ extras.undot = function(obj, sep = '.') {
   return un
 }
 
+// Remove null and undefined from object
+extras.clean = function(obj) {
+  if (Array.isArray(obj)) {
+    return obj
+      .map(v => (v && typeof v == 'object') ? extras.clean(v) : v)
+      .filter(v => !(v == null))
+  } else {
+    return Object.entries(obj)
+      .map(([k, v]) => [k, v && typeof v == 'object' ? extras.clean(v) : v])
+      .reduce((a, [k, v]) => (v == null ? a : (a[k] = v, a)), {})
+  }
+}
+
 // Get base and extension
 extras.basext = function(file) {
   const name = path.basename(file)
