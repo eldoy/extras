@@ -48,6 +48,10 @@ describe('extras', () => {
     extras.transform(params)
     expect(typeof params.hello.getMonth).toBe('function')
 
+    // params = { val: '%r/hello/'}
+    // extras.transform(params)
+    // expect(typeof params.hello.getMonth).toBe('function')
+
     params = { val: '5' }
     extras.transform(params)
     expect(params.val).toBe(5)
@@ -210,5 +214,34 @@ describe('extras', () => {
     expect(obj.e[0]).toBe(1)
     expect(obj.e[1]).toBe(2)
     expect(obj.e[2]).toBe(3)
+  })
+
+  it('should find the object type', async function() {
+    let result = extras.type('hello')
+    expect(result).toBe('string')
+
+    result = extras.type(5)
+    expect(result).toBe('number')
+
+    result = extras.type(5.0)
+    expect(result).toBe('number')
+
+    result = extras.type(NaN)
+    expect(result).toBe('number')
+
+    result = extras.type(/hello/)
+    expect(result).toBe('regexp')
+
+    result = extras.type()
+    expect(result).toBe('undefined')
+
+    result = extras.type(true)
+    expect(result).toBe('boolean')
+
+    result = extras.type(false)
+    expect(result).toBe('boolean')
+
+    result = extras.type(new Date)
+    expect(result).toBe('date')
   })
 })

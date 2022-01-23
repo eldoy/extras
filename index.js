@@ -66,6 +66,11 @@ extras.parseBool = function(v) {
   return ['false', 'null', 'NaN', 'undefined', '0'].includes(v) ? false : !!v
 }
 
+// Find object type
+extras.type = function(obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase()
+}
+
 // Format and interpolate strings
 extras.format = function(str, ...args) {
   for (let i = 0; i < args.length; i++) {
