@@ -47,6 +47,22 @@ describe('extras', () => {
     params = { hello: '2020-11-02T08:22:31Z' }
     extras.transform(params)
     expect(typeof params.hello.getMonth).toBe('function')
+
+    params = { val: '5' }
+    extras.transform(params)
+    expect(params.val).toBe(5)
+
+    params = { val: 'null' }
+    extras.transform(params)
+    expect(params.val).toBeNull()
+
+    params = { val: 'true' }
+    extras.transform(params)
+    expect(params.val).toBe(true)
+
+    params = { val: 'false' }
+    extras.transform(params)
+    expect(params.val).toBe(false)
   })
 
   it('should md5 hash a string', () => {

@@ -122,6 +122,10 @@ extras.transform = function(node) {
         node[k] = new Date(node[k])
       } else if (node[k].match(extras.regexp.reg)) {
         node[k] = new RegExp(RegExp.$1, RegExp.$2)
+      } else {
+        try {
+          node[k] = JSON.parse(node[k])
+        } catch(e){}
       }
     }
   }
