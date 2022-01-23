@@ -67,6 +67,9 @@ describe('extras', () => {
     params = { val: 'false' }
     extras.transform(params)
     expect(params.val).toBe(false)
+
+    result = extras.transform('hello')
+    expect(result).toBe('hello')
   })
 
   it('should md5 hash a string', () => {

@@ -116,24 +116,32 @@ extras.strip = function(str, sep = '\n') {
   return str.split(sep).map(s => s.trim()).join(sep)
 }
 
-// Transform JSON string nodes to Javascript native objects
-extras.transform = function(node) {
-  for (const k in node) {
-    if (node[k] && typeof node[k] === 'object') {
-      extras.transform(node[k])
-    } else if (typeof node[k] === 'string') {
-      node[k] = node[k].trim()
-      if (extras.isDate(node[k]) && Date.parse(node[k])) {
-        node[k] = new Date(node[k])
-      } else if (node[k].match(extras.regexp.reg)) {
-        node[k] = new RegExp(RegExp.$1, RegExp.$2)
-      } else {
-        try {
-          node[k] = JSON.parse(node[k])
-        } catch(e){}
+// Transform object string values to Javascript native objects
+extras.transform = function(obj) {
+  const simple = typeof obj != 'object'
+  if (simple) obj = [obj]
+
+  function build(obj) {
+    for (const k in obj) {
+      if (obj[k] && typeof obj[k] === 'object') {
+        extras.transform(obj[k])
+      } else if (typeof obj[k] === 'string') {
+        obj[k] = obj[k].trim()
+        if (extras.isDate(obj[k]) && Date.parse(obj[k])) {
+          obj[k] = new Date(obj[k])
+        } else if (obj[k].match(extras.regexp.reg)) {
+          obj[k] = new RegExp(RegExp.$1, RegExp.$2)
+        } else {
+          try {
+            obj[k] = JSON.parse(obj[k])
+          } catch(e){}
+        }
       }
     }
   }
+  build(obj)
+
+  return simple ? obj[0] : obj
 }
 
 // Convert values based on type
