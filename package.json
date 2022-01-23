@@ -1,6 +1,6 @@
 {
   "name": "extras",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Large collection of Node JS functions, regexps and extras",
   "main": "index.js",
   "directories": {
