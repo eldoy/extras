@@ -48,9 +48,9 @@ describe('extras', () => {
     extras.transform(params)
     expect(typeof params.hello.getMonth).toBe('function')
 
-    // params = { val: '%r/hello/'}
-    // extras.transform(params)
-    // expect(typeof params.hello.getMonth).toBe('function')
+    params = { val: '%r/hello/'}
+    extras.transform(params)
+    expect(extras.type(params.val)).toBe('regexp')
 
     params = { val: '5' }
     extras.transform(params)
