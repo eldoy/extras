@@ -25,6 +25,7 @@ extras.regexp.image = /\.(gif|jpe?g|tiff|png|bmp|svg)$/i
 extras.regexp.subdomain = /^[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]$/
 extras.uuid = uuidv4
 extras.cuid = cuid
+extras.lodash = _
 
 extras.hash = function(str, saltRounds = 10) {
   return bcrypt.hashSync(String(str), saltRounds)
