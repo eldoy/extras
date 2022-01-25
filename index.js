@@ -191,17 +191,27 @@ extras.undot = function(obj, sep = '.') {
   return un
 }
 
-// Remove null and undefined from object
-extras.clean = function(obj) {
-  if (Array.isArray(obj)) {
-    return obj
-      .map(v => (v && typeof v == 'object') ? extras.clean(v) : v)
-      .filter(v => !(v == null))
-  } else {
-    return Object.entries(obj)
-      .map(([k, v]) => [k, v && typeof v == 'object' ? extras.clean(v) : v])
-      .reduce((a, [k, v]) => (v == null ? a : (a[k] = v, a)), {})
+// Remove null and undefined from object, or optional types
+extras.clean = function(data, ...types) {
+  function match(val) {
+    return !types.length && val == null || types.includes(extras.type(val))
   }
+
+  function build(obj) {
+    for (const key in obj) {
+      if (obj[key] && typeof obj[key] == 'object') {
+        build(obj[key])
+      } else if (match(obj[key])) {
+        if (Array.isArray(obj)) {
+          obj.splice(key, 1)
+        } else {
+          delete obj[key]
+        }
+      }
+    }
+  }
+  build(data)
+  return data
 }
 
 // Get base and extension

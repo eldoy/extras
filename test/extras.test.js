@@ -202,21 +202,33 @@ describe('extras', () => {
   })
 
   it('should clean an object', async function() {
-    let obj = {
+    let data = {
       a: null,
       b: {
         c: null,
-        d: 1
+        d: 1,
       },
-      e: [1, 2, null, 3]
+      e: [1, 2, null, 3],
+      f: undefined,
+      g: 'hello'
     }
-    obj = extras.clean(obj)
-    expect(typeof obj.a).toBe('undefined')
-    expect(typeof obj.b.c).toBe('undefined')
+
+    let obj = extras.clean({ ...data })
+    expect(obj.a).toBeUndefined()
+    expect(obj.b.c).toBeUndefined()
     expect(obj.b.d).toBe(1)
     expect(obj.e[0]).toBe(1)
     expect(obj.e[1]).toBe(2)
     expect(obj.e[2]).toBe(3)
+    expect(obj.f).toBeUndefined()
+    expect(obj.g).toBe('hello')
+    expect(Object.keys(obj).length).toBe(3)
+
+    obj = extras.clean({ ...data}, 'null')
+    expect(Object.keys(obj).length).toBe(4)
+
+    obj = extras.clean({ ...data}, 'string')
+    expect(Object.keys(obj).length).toBe(4)
   })
 
   it('should find the object type', async function() {
