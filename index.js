@@ -314,6 +314,13 @@ extras.input = async function(str = '> ', opt = {}) {
   return answer
 }
 
+// Get keypress from stdin
+extras.key = function(fn) {
+  readline.emitKeypressEvents(process.stdin)
+  process.stdin.setRawMode(true)
+  process.stdin.on('keypress', fn)
+}
+
 // Read directory
 extras.dir = function(file) {
   file = extras.resolve(file)
