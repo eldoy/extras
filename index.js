@@ -118,7 +118,7 @@ extras.strip = function(str, sep = '\n') {
 }
 
 // Transform object string values to Javascript native objects
-extras.transform = function(obj) {
+extras.transform = function(obj, opt = {}) {
   const simple = typeof obj != 'object'
   if (simple) obj = [obj]
 
@@ -128,14 +128,12 @@ extras.transform = function(obj) {
         extras.transform(obj[k])
       } else if (typeof obj[k] === 'string') {
         obj[k] = obj[k].trim()
+        const m = obj[k].match(extras.regexp.reg)
+        if (m) {
+          obj[k] = new RegExp(m[1], m[2])
+        }
         if (extras.isDate(obj[k]) && Date.parse(obj[k])) {
           obj[k] = new Date(obj[k])
-        } else if (obj[k].match(extras.regexp.reg)) {
-          obj[k] = new RegExp(RegExp.$1, RegExp.$2)
-        } else {
-          try {
-            obj[k] = JSON.parse(obj[k])
-          } catch(e){}
         }
       }
     }

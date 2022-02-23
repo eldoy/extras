@@ -52,24 +52,24 @@ describe('extras', () => {
     extras.transform(params)
     expect(extras.type(params.val)).toBe('regexp')
 
+    result = extras.transform('hello')
+    expect(result).toBe('hello')
+
     params = { val: '5' }
     extras.transform(params)
-    expect(params.val).toBe(5)
+    expect(params.val).toBe('5')
 
     params = { val: 'null' }
     extras.transform(params)
-    expect(params.val).toBeNull()
+    expect(params.val).toBe('null')
 
     params = { val: 'true' }
     extras.transform(params)
-    expect(params.val).toBe(true)
+    expect(params.val).toBe('true')
 
     params = { val: 'false' }
     extras.transform(params)
-    expect(params.val).toBe(false)
-
-    result = extras.transform('hello')
-    expect(result).toBe('hello')
+    expect(params.val).toBe('false')
   })
 
   it('should md5 hash a string', () => {
