@@ -20,10 +20,10 @@
     "cuid": "^2.1.8",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "shelljs": "^0.8.4",
+    "shelljs": "^0.8.5",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "jest": "~27.4.5"
+    "jest": "~27.5.1"
   }
 }
