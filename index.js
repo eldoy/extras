@@ -271,6 +271,8 @@ extras.write = function(file, content) {
       content = yaml.dump(content)
     }
   }
+  const dirname = path.dirname(file)
+  extras.mkdir(dirname)
   return fs.writeFileSync(file, content)
 }
 
