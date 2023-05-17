@@ -24,6 +24,9 @@ extras.regexp.url =
   /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/
 extras.regexp.ip = /^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])(\.(?!$)|$)){4}$/
 extras.regexp.image = /\.(gif|jpe?g|tiff|png|bmp|svg)$/i
+extras.regexp.domain =
+  /^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,61}?$/i
+
 extras.regexp.subdomain = /^[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]$/
 extras.uuid = uuidv4
 extras.cuid = cuid

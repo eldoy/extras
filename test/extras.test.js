@@ -269,4 +269,15 @@ describe('extras', () => {
     let result = extras.env('test/assets/unenv.json', 'production')
     expect(result.hello).toEqual(1)
   })
+
+  it('should match domain regexp', async function () {
+    let result = extras.regexp.domain.test('eldoy.com')
+    expect(result).toEqual(true)
+
+    result = extras.regexp.domain.test('www.eldoy.com')
+    expect(result).toEqual(true)
+
+    result = extras.regexp.domain.test('http://eldoy.com')
+    expect(result).toEqual(false)
+  })
 })
