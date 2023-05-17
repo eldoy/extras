@@ -456,8 +456,10 @@ extras.sleep = function (s = 1) {
 
 // Env
 extras.env = function (file, mode) {
-  let content = extras.read(file)
-
+  let content = {}
+  if (extras.exist(file)) {
+    content = extras.read(file)
+  }
   // Merge environment file content
   if (typeof content == 'object') {
     const [base, ext] = extras.basext(file)
@@ -473,23 +475,6 @@ extras.env = function (file, mode) {
   }
 
   return content
-
-  // const envname = `waveorb.${env}.json`
-  // try {
-  //   if (exist(name)) {
-  //     config = read(name)
-  //   }
-  //   if (exist(envname)) {
-  //     const data = read(envname)
-  //     _.mergeWith(config, data, function (obj, src) {
-  //       if (_.isArray(obj)) {
-  //         return obj.concat(src)
-  //       }
-  //     })
-  //   }
-  // } catch (e) {
-  //   console.log('Can not read config:', e.message)
-  // }
 }
 
 module.exports = extras

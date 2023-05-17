@@ -260,6 +260,11 @@ describe('extras', () => {
     expect(result).toBe('date')
   })
 
+  it('should return empty config if file does not exist', async function () {
+    let result = extras.env('test/assets/not.json', 'production')
+    expect(typeof result).toBe('object')
+  })
+
   it('should read and merge env files', async function () {
     let result = extras.env('test/assets/env.json', 'production')
     expect(result.hello).toEqual(3)
