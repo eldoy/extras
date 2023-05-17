@@ -451,4 +451,42 @@ extras.sleep = function (s = 1) {
   return new Promise((r) => setTimeout(r, s * 1000))
 }
 
+// Env
+extras.env = function (file, mode) {
+  let content = extras.read(file)
+
+  // Merge environment file content
+  if (typeof content == 'object') {
+    const [base, ext] = extras.basext(file)
+    const name = file.replace(`.${ext}`, `.${mode}.${ext}`)
+    if (extras.exist(name)) {
+      const data = extras.read(name)
+      _.mergeWith(content, data, function customizer(obj, src) {
+        if (_.isArray(obj)) {
+          return obj.concat(src)
+        }
+      })
+    }
+  }
+
+  return content
+
+  // const envname = `waveorb.${env}.json`
+  // try {
+  //   if (exist(name)) {
+  //     config = read(name)
+  //   }
+  //   if (exist(envname)) {
+  //     const data = read(envname)
+  //     _.mergeWith(config, data, function (obj, src) {
+  //       if (_.isArray(obj)) {
+  //         return obj.concat(src)
+  //       }
+  //     })
+  //   }
+  // } catch (e) {
+  //   console.log('Can not read config:', e.message)
+  // }
+}
+
 module.exports = extras

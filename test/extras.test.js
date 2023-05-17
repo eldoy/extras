@@ -48,7 +48,7 @@ describe('extras', () => {
     extras.transform(params)
     expect(typeof params.hello.getMonth).toBe('function')
 
-    params = { val: '%r/hello/'}
+    params = { val: '%r/hello/' }
     extras.transform(params)
     expect(extras.type(params.val)).toBe('regexp')
 
@@ -128,7 +128,7 @@ describe('extras', () => {
     let result = extras.sortByNumber(t.slice())
     expect(result).toEqual(['10-c', '11-a', '1000-b'])
 
-    result = extras.sortByNumber(t.slice(), function(a, b) {
+    result = extras.sortByNumber(t.slice(), function (a, b) {
       return (b.match(/^\d+/g) || b) - (a.match(/^\d+/g) || a)
     })
     expect(result).toEqual(['10-c', '11-a', '1000-b'].reverse())
@@ -201,12 +201,12 @@ describe('extras', () => {
     })
   })
 
-  it('should clean an object', async function() {
+  it('should clean an object', async function () {
     let data = {
       a: null,
       b: {
         c: null,
-        d: 1,
+        d: 1
       },
       e: [1, 2, null, 3],
       f: undefined,
@@ -224,14 +224,14 @@ describe('extras', () => {
     expect(obj.g).toBe('hello')
     expect(Object.keys(obj).length).toBe(3)
 
-    obj = extras.clean({ ...data}, 'null')
+    obj = extras.clean({ ...data }, 'null')
     expect(Object.keys(obj).length).toBe(4)
 
-    obj = extras.clean({ ...data}, 'string')
+    obj = extras.clean({ ...data }, 'string')
     expect(Object.keys(obj).length).toBe(4)
   })
 
-  it('should find the object type', async function() {
+  it('should find the object type', async function () {
     let result = extras.type('hello')
     expect(result).toBe('string')
 
@@ -256,7 +256,17 @@ describe('extras', () => {
     result = extras.type(false)
     expect(result).toBe('boolean')
 
-    result = extras.type(new Date)
+    result = extras.type(new Date())
     expect(result).toBe('date')
+  })
+
+  it('should read and merge env files', async function () {
+    let result = extras.env('test/assets/env.json', 'production')
+    expect(result.hello).toEqual(3)
+  })
+
+  it('should not read and merge files without env', async function () {
+    let result = extras.env('test/assets/unenv.json', 'production')
+    expect(result.hello).toEqual(1)
   })
 })
