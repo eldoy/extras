@@ -285,4 +285,12 @@ describe('extras', () => {
     result = extras.regexp.domain.test('http://eldoy.com')
     expect(result).toEqual(false)
   })
+
+  it('should generate a hex', async function () {
+    let result = extras.hex()
+    expect(result.length).toEqual(20)
+
+    result = extras.hex(9)
+    expect(result.length).toEqual(9)
+  })
 })

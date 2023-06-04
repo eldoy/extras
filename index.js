@@ -42,7 +42,7 @@ extras.md5 = function (str) {
 }
 
 extras.hex = function (size = 20) {
-  return crypto.randomBytes(size).toString('hex')
+  return crypto.randomBytes(size).toString('hex').slice(0, size)
 }
 
 extras.compare = function (plain, hash) {
@@ -330,16 +330,18 @@ extras.get = function (cmd) {
 }
 
 // Get terminal input
-extras.input = async function (str = '> ', opt = {}) {
-  opt = {
+extras.input = async function (prompt = '> ', opt = {}) {
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     ...opt
-  }
-  const rl = readline.createInterface(opt)
-  const answer = await new Promise((r) => rl.question(str, r))
-  rl.close()
-  return answer
+  })
+  return await new Promise(function (resolve) {
+    rl.question(prompt, function (str) {
+      rl.close()
+      resolve(str)
+    })
+  })
 }
 
 // Get keypress from stdin
