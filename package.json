@@ -16,7 +16,7 @@
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "license": "MIT",
   "dependencies": {
-    "@paralleldrive/cuid2": "^2.2.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "bcryptjs": "^2.4.3",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
@@ -24,6 +24,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "jest": "~29.5.0"
+    "jest": "~29.6.2"
   }
 }
