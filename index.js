@@ -32,6 +32,7 @@ extras.regexp.subdomain = /^[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]$/
 extras.uuid = uuidv4
 extras.cuid = cuid
 extras.lodash = _
+extras.yaml = yaml
 
 extras.hash = function (str, saltRounds = 10) {
   return bcrypt.hashSync(String(str), saltRounds)
