@@ -1,19 +1,19 @@
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
-const util = require('util')
-const crypto = require('crypto')
-const _ = require('lodash')
-const { v4: uuidv4 } = require('uuid')
-const cuid = require('@paralleldrive/cuid2').createId
-const bcrypt = require('bcryptjs')
-const yaml = require('js-yaml')
-const sh = require('shelljs')
-const readline = require('readline')
+var fs = require('fs')
+var path = require('path')
+var os = require('os')
+var util = require('util')
+var crypto = require('crypto')
+var _ = require('lodash')
+var { v4: uuidv4 } = require('uuid')
+var cuid = require('@paralleldrive/cuid2').createId
+var bcrypt = require('bcryptjs')
+var yaml = require('js-yaml')
+var sh = require('shelljs')
+var readline = require('readline')
 
-const NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
+var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
-const extras = {}
+var extras = {}
 extras.regexp = {}
 extras.regexp.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 extras.regexp.id = /^[a-z0-9]{24,}$/
@@ -97,13 +97,13 @@ extras.format = function (str, ...args) {
 
 // Inspect object
 extras.inspect = function (obj, options = {}) {
-  const _obj = _.cloneDeep(obj)
+  var _obj = _.cloneDeep(obj)
   if (options.exclude) {
-    for (const opt of options.exclude) {
+    for (var opt of options.exclude) {
       _.set(_obj, opt, null)
     }
   }
-  const result = util.inspect(
+  var result = util.inspect(
     _obj,
     ({ showHidden = true, depth = null, colors = true } = options)
   )
@@ -115,7 +115,7 @@ extras.inspect = function (obj, options = {}) {
 
 // Trim strings in object
 extras.trim = function (obj) {
-  for (const key in obj) {
+  for (var key in obj) {
     if (typeof obj[key] === 'object') {
       extras.trim(obj[key])
     } else if (typeof obj[key] === 'string') {
@@ -134,16 +134,16 @@ extras.strip = function (str, sep = '\n') {
 
 // Transform object string values to Javascript native objects
 extras.transform = function (obj, opt = {}) {
-  const simple = typeof obj != 'object'
+  var simple = typeof obj != 'object'
   if (simple) obj = [obj]
 
   function build(obj) {
-    for (const k in obj) {
+    for (var k in obj) {
       if (obj[k] && typeof obj[k] === 'object') {
         extras.transform(obj[k])
       } else if (typeof obj[k] === 'string') {
         obj[k] = obj[k].trim()
-        const m = obj[k].match(extras.regexp.reg)
+        var m = obj[k].match(extras.regexp.reg)
         if (m) {
           obj[k] = new RegExp(m[1], m[2])
         }
@@ -180,10 +180,10 @@ extras.convert = function (v, type) {
 
 // Convert object to dot notation
 extras.dot = function (obj, sep = '.') {
-  const dotted = {}
+  var dotted = {}
   function build(obj, str) {
     for (var key in obj) {
-      const trail = str ? `${str}${sep}${key}` : key
+      var trail = str ? `${str}${sep}${key}` : key
       if (_.isPlainObject(obj[key])) {
         build(obj[key], trail)
       } else {
@@ -197,10 +197,10 @@ extras.dot = function (obj, sep = '.') {
 
 // Unpack object with dot notation
 extras.undot = function (obj, sep = '.') {
-  const un = {}
+  var un = {}
   function build(obj, str) {
-    for (const key in obj) {
-      const trail = str ? `${str}${sep}${key}` : key
+    for (var key in obj) {
+      var trail = str ? `${str}${sep}${key}` : key
       if (_.isPlainObject(obj[key])) {
         build(obj[key], trail)
       } else {
@@ -219,7 +219,7 @@ extras.clean = function (data, ...types) {
   }
 
   function build(obj) {
-    for (const key in obj) {
+    for (var key in obj) {
       if (obj[key] && typeof obj[key] == 'object') {
         build(obj[key])
       } else if (match(obj[key])) {
@@ -237,7 +237,7 @@ extras.clean = function (data, ...types) {
 
 // Get base and extension
 extras.basext = function (file) {
-  const name = path.basename(file)
+  var name = path.basename(file)
   let base = name
   let ext = ''
   if (name.includes('.')) {
@@ -249,11 +249,11 @@ extras.basext = function (file) {
 
 // Turn a string into a valid slug for web addresses
 extras.slug = function (string) {
-  const a =
+  var a =
     'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;'
-  const b =
+  var b =
     'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------'
-  const p = new RegExp(a.split('').join('|'), 'g')
+  var p = new RegExp(a.split('').join('|'), 'g')
 
   return string
     .toString()
@@ -276,14 +276,14 @@ extras.exist = function (file) {
 // Read file
 extras.read = function (file, encoding) {
   file = extras.resolve(file)
-  const [base, ext] = extras.basext(file)
+  var [base, ext] = extras.basext(file)
   if (
     NODE_EXTENSIONS.includes(encoding) ||
     (!encoding && NODE_EXTENSIONS.includes(ext))
   ) {
     return require(file)
   }
-  const content = fs.readFileSync(file, encoding || 'utf8')
+  var content = fs.readFileSync(file, encoding || 'utf8')
   if (encoding == 'yml' || (!encoding && ext == 'yml')) {
     return yaml.load(content) || {}
   }
@@ -300,7 +300,7 @@ extras.write = function (file, content) {
       content = yaml.dump(content)
     }
   }
-  const dirname = path.dirname(file)
+  var dirname = path.dirname(file)
   extras.mkdir(dirname)
   return fs.writeFileSync(file, content)
 }
@@ -314,8 +314,8 @@ extras.append = function (file, content) {
 // Edit file
 extras.edit = function (file, fn) {
   file = extras.resolve(file)
-  const content = extras.read(file, 'utf8')
-  const result = fn(content) || ''
+  var content = extras.read(file, 'utf8')
+  var result = fn(content) || ''
   extras.write(file, result)
 }
 
@@ -332,7 +332,7 @@ extras.get = function (cmd) {
 
 // Get terminal input
 extras.input = async function (prompt = '> ', opt = {}) {
-  const rl = readline.createInterface({
+  var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     ...opt
@@ -425,7 +425,7 @@ extras.resolve = function (...dirs) {
 // Walk directory tree
 extras.walk = function (dir, fn) {
   extras.dir(dir).forEach((f) => {
-    const file = path.join(dir, f)
+    var file = path.join(dir, f)
     if (extras.isDir(file)) {
       extras.walk(file, fn)
     } else {
@@ -438,7 +438,7 @@ extras.walk = function (dir, fn) {
 extras.tree = function (root) {
   root = extras.resolve(root)
   if (!extras.exist(root)) return []
-  const files = []
+  var files = []
   extras.walk(root, function (file) {
     files.push(file)
   })
@@ -466,10 +466,10 @@ extras.env = function (file, mode) {
   }
   // Merge environment file content
   if (typeof content == 'object') {
-    const [base, ext] = extras.basext(file)
-    const name = file.replace(`.${ext}`, `.${mode}.${ext}`)
+    var [base, ext] = extras.basext(file)
+    var name = file.replace(`.${ext}`, `.${mode}.${ext}`)
     if (extras.exist(name)) {
-      const data = extras.read(name)
+      var data = extras.read(name)
       _.mergeWith(content, data, function customizer(obj, src) {
         if (_.isArray(obj)) {
           return obj.concat(src)
