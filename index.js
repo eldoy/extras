@@ -3,7 +3,7 @@ var path = require('path')
 var os = require('os')
 var util = require('util')
 var crypto = require('crypto')
-var _ = require('lodash')
+var lodash = require('lodash')
 var { v4: uuidv4 } = require('uuid')
 var cuid = require('@paralleldrive/cuid2').createId
 var bcrypt = require('bcryptjs')
@@ -31,7 +31,7 @@ extras.regexp.domain =
 extras.regexp.subdomain = /^[a-z0-9][a-z0-9-_]{0,61}[a-z0-9]$/
 extras.uuid = uuidv4
 extras.cuid = cuid
-extras.lodash = _
+extras.lodash = lodash
 extras.yaml = yaml
 
 extras.hash = function (str, saltRounds = 10) {
@@ -85,7 +85,7 @@ extras.format = function (str, ...args) {
     let val = args[i]
     if (Array.isArray(val)) {
       val = val.join(', ')
-    } else if (_.isPlainObject(val)) {
+    } else if (lodash.isPlainObject(val)) {
       val = Object.entries(val)
         .map((x) => x.join(': '))
         .join(', ')
@@ -97,10 +97,10 @@ extras.format = function (str, ...args) {
 
 // Inspect object
 extras.inspect = function (obj, options = {}) {
-  var _obj = _.cloneDeep(obj)
+  var _obj = lodash.cloneDeep(obj)
   if (options.exclude) {
     for (var opt of options.exclude) {
-      _.set(_obj, opt, null)
+      lodash.set(_obj, opt, null)
     }
   }
   var result = util.inspect(
@@ -184,7 +184,7 @@ extras.dot = function (obj, sep = '.') {
   function build(obj, str) {
     for (var key in obj) {
       var trail = str ? `${str}${sep}${key}` : key
-      if (_.isPlainObject(obj[key])) {
+      if (lodash.isPlainObject(obj[key])) {
         build(obj[key], trail)
       } else {
         dotted[trail] = obj[key]
@@ -201,10 +201,10 @@ extras.undot = function (obj, sep = '.') {
   function build(obj, str) {
     for (var key in obj) {
       var trail = str ? `${str}${sep}${key}` : key
-      if (_.isPlainObject(obj[key])) {
+      if (lodash.isPlainObject(obj[key])) {
         build(obj[key], trail)
       } else {
-        _.set(un, trail, obj[key])
+        lodash.set(un, trail, obj[key])
       }
     }
   }
@@ -293,7 +293,7 @@ extras.read = function (file, encoding) {
 // Write file
 extras.write = function (file, content) {
   file = extras.resolve(file)
-  if (Array.isArray(content) || _.isPlainObject(content)) {
+  if (Array.isArray(content) || lodash.isPlainObject(content)) {
     if (file.endsWith('.json')) {
       content = JSON.stringify(content)
     } else if (file.endsWith('.yml')) {
@@ -470,8 +470,8 @@ extras.env = function (file, mode) {
     var name = file.replace(`.${ext}`, `.${mode}.${ext}`)
     if (extras.exist(name)) {
       var data = extras.read(name)
-      _.mergeWith(content, data, function customizer(obj, src) {
-        if (_.isArray(obj)) {
+      lodash.mergeWith(content, data, function customizer(obj, src) {
+        if (lodash.isArray(obj)) {
           return obj.concat(src)
         }
       })
