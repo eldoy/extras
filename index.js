@@ -470,7 +470,7 @@ extras.env = function (file, mode) {
     var name = file.replace(`.${ext}`, `.${mode}.${ext}`)
     if (extras.exist(name)) {
       var data = extras.read(name)
-      lodash.mergeWith(content, data, function customizer(obj, src) {
+      lodash.mergeWith(content, data, function (obj, src) {
         if (lodash.isArray(obj)) {
           return obj.concat(src)
         }
