@@ -14,6 +14,7 @@ var readline = require('readline')
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
 var extras = {}
+extras.NODE_EXTENSIONS = NODE_EXTENSIONS
 extras.regexp = {}
 extras.regexp.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 extras.regexp.id = /^[a-z0-9]{24,}$/
