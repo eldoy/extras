@@ -96,6 +96,16 @@ extras.format = function (str, ...args) {
   return str
 }
 
+// Print strings in-place
+extras.print = function (str) {
+  if (typeof str == 'object') {
+    str = JSON.stringify(str)
+  }
+  process.stdout.clearLine()
+  process.stdout.cursorTo(0)
+  process.stdout.write(`${str}`)
+}
+
 // Inspect object
 extras.inspect = function (obj, options = {}) {
   var _obj = lodash.cloneDeep(obj)
