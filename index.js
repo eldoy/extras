@@ -336,7 +336,7 @@ extras.exit = function (msg, code = 1) {
   process.exit(code)
 }
 
-// Get command input
+// Get command output
 extras.get = function (cmd) {
   return extras.run(cmd, { silent: true }).stdout.trim()
 }
