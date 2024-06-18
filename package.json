@@ -11,7 +11,7 @@
     "url": "git@github.com/eldoy/extras.git"
   },
   "scripts": {
-    "test": "nodemon -q --exec spekk"
+    "test": "nodemon -q --exec spekk --ignore 'spec/files/*'"
   },
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "license": "MIT",

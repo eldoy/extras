@@ -111,3 +111,6 @@ dist
 
 # Webstorm
 .idea
+
+# Test files
+spec/files
