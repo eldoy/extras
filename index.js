@@ -8,10 +8,57 @@ var { v4: uuidv4 } = require('uuid')
 var cuid = require('@paralleldrive/cuid2').createId
 var bcrypt = require('bcryptjs')
 var yaml = require('js-yaml')
-var sh = require('shelljs')
 var readline = require('readline')
+var { spawnSync } = require('child_process')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
+
+function spawn(cmd, options, ...args) {
+  if (typeof options == 'string') {
+    args = [options, ...args]
+    options = null
+  }
+
+  var process = spawnSync(cmd, args, {
+    shell: true,
+    encoding: 'utf-8'
+  })
+
+  var { status, stdout, stderr } = process
+
+  if (options?.silent != true) {
+    if (stdout) {
+      console.log(stdout)
+    }
+    if (stderr) {
+      console.log(stderr)
+    }
+  }
+
+  return {
+    stdout: stdout?.toString(),
+    stderr: status ? stderr?.toString() : null,
+    code: status
+  }
+}
+
+var sh = {
+  cp: function (options = '', from, to) {
+    return spawn('cp', { silent: true }, options, from, to)
+  },
+  exec: function (command, options) {
+    return spawn(command, options)
+  },
+  mkdir: function (options = '', ...files) {
+    return spawn('mkdir', { silent: true }, options, ...files)
+  },
+  mv: function (from, to) {
+    return spawn('mv', { silent: true }, from, to)
+  },
+  rm: function (options = '', ...files) {
+    return spawn('rm', { silent: true }, options, ...files)
+  }
+}
 
 var extras = {}
 extras.NODE_EXTENSIONS = NODE_EXTENSIONS
