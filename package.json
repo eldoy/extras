@@ -20,7 +20,6 @@
     "bcryptjs": "^2.4.3",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "shelljs": "^0.8.5",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
