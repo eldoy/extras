@@ -317,7 +317,7 @@ it('run, should run command', async ({ t }) => {
   await exec('mkdir spec/files')
   await exec('mkdir spec/files/dir1')
 
-  var result = extras.run('ls spec/files', { silent: false })
+  var result = extras.run('ls spec/files', { silent: true })
   t.equal(result.stdout.trim(), 'dir1')
 
   result = await exec('ls spec/files')
