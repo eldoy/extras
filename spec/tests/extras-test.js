@@ -1,7 +1,7 @@
 var extras = require('../../index.js')
 var os = require('os')
-const util = require('node:util')
-const exec = util.promisify(require('node:child_process').exec)
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
 
 setup(async function () {
   await exec('rm -rf spec/files')
