@@ -299,7 +299,7 @@ it('should generate a hex', ({ t }) => {
   t.equal(result.length, 9)
 })
 
-it('copy, should copy files', async ({ t }) => {
+it('should copy files', async ({ t }) => {
   await exec('mkdir spec/files')
   await exec('touch spec/files/file1.json')
 
@@ -313,7 +313,7 @@ it('copy, should copy files', async ({ t }) => {
   t.deepStrictEqual(result, ['file1.json', 'file2.json'])
 })
 
-it('run, should run command', async ({ t }) => {
+it('should run command', async ({ t }) => {
   await exec('mkdir spec/files')
   await exec('mkdir spec/files/dir1')
 
@@ -325,7 +325,7 @@ it('run, should run command', async ({ t }) => {
   t.deepStrictEqual(result, ['dir1'])
 })
 
-it('mkdir, should create dir', async ({ t }) => {
+it('should create dir', async ({ t }) => {
   var result = extras.mkdir('spec/files/dir1', './spec/files/dir2')
   t.equal(result.stdout, '')
   t.equal(result.stderr, null)
@@ -336,7 +336,7 @@ it('mkdir, should create dir', async ({ t }) => {
   t.deepStrictEqual(result, ['dir1', 'dir2'])
 })
 
-it('rmdir, should remove dir', async ({ t }) => {
+it('should remove dir', async ({ t }) => {
   await exec('mkdir spec/files')
   await exec('mkdir spec/files/dir1')
   await exec('mkdir spec/files/dir2')
@@ -351,7 +351,7 @@ it('rmdir, should remove dir', async ({ t }) => {
   t.deepStrictEqual(result, [])
 })
 
-it('rename, should rename file', async ({ t }) => {
+it('should rename file', async ({ t }) => {
   await exec('mkdir spec/files')
   await exec('touch spec/files/file1.json')
 
