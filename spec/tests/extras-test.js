@@ -364,3 +364,13 @@ it('rename, should rename file', async ({ t }) => {
   result = result.stdout.split('\n').filter(Boolean)
   t.deepStrictEqual(result, ['file2.json'])
 })
+
+it('should encode', async ({ t }) => {
+  var result = extras.encode('Hello World')
+  t.equal(result, 'SGVsbG8gV29ybGQ=')
+})
+
+it('should decode', async ({ t }) => {
+  var result = extras.decode('SGVsbG8gV29ybGQ=')
+  t.equal(result, 'Hello World')
+})
