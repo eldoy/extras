@@ -443,6 +443,16 @@ extras.isFile = function (file) {
   }
 }
 
+// Is symbolic link?
+extras.isSymlink = function (file) {
+  file = extras.resolve(file)
+  try {
+    return fs.lstatSync(file).isSymbolicLink()
+  } catch (e) {
+    return false
+  }
+}
+
 // Run command
 extras.run = function (command, options = {}) {
   return sh.exec(command, options)
