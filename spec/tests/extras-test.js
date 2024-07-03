@@ -304,6 +304,7 @@ it('should copy files', async ({ t }) => {
   await exec('touch spec/files/file1.json')
 
   var result = extras.copy('spec/files/file1.json', 'spec/files/file2.json')
+
   t.equal(result.stdout, '')
   t.equal(result.stderr, null)
   t.equal(result.code, 0)
