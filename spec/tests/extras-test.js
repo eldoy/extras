@@ -57,6 +57,10 @@ it('should transform a string', ({ t }) => {
   extras.transform(params)
   t.equal(typeof params.hello.getMonth, 'function')
 
+  params = { hello: '2024-07-21T13:59:15.307' }
+  extras.transform(params)
+  t.equal(typeof params.hello.getMonth, 'function')
+
   params = { val: '%r/hello/' }
   extras.transform(params)
   t.equal(extras.type(params.val), 'regexp')

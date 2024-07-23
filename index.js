@@ -111,7 +111,6 @@ extras.isRegExp = function (str) {
 }
 
 extras.isDate = function (str) {
-  console.log({ str })
   return extras.regexp.date.test(String(str))
 }
 
