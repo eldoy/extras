@@ -11,6 +11,7 @@ var yaml = require('js-yaml')
 var readline = require('readline')
 var spawn = require('./lib/spawn.js')
 var sh = require('./lib/sh.js')
+var exec = require('./lib/exec.js')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
@@ -35,6 +36,8 @@ extras.uuid = uuidv4
 extras.cuid = cuid
 extras.lodash = lodash
 extras.yaml = yaml
+extras.spawn = spawn
+extras.exec = exec
 
 extras.hash = function (str, saltRounds = 10) {
   return bcrypt.hashSync(String(str), saltRounds)
@@ -83,8 +86,8 @@ extras.type = function (obj) {
 
 // Format and interpolate strings
 extras.format = function (str, ...args) {
-  for (let i = 0; i < args.length; i++) {
-    let val = args[i]
+  for (var i = 0; i < args.length; i++) {
+    var val = args[i]
     if (Array.isArray(val)) {
       val = val.join(', ')
     } else if (lodash.isPlainObject(val)) {
@@ -113,19 +116,19 @@ extras.print = function (str) {
 }
 
 // Inspect object
-extras.inspect = function (obj, options = {}) {
+extras.inspect = function (obj, opt = {}) {
   var _obj = lodash.cloneDeep(obj)
-  if (options.exclude) {
-    for (var opt of options.exclude) {
+  if (opt.exclude) {
+    for (var opt of opt.exclude) {
       lodash.set(_obj, opt, null)
     }
   }
   var result = util.inspect(
     _obj,
-    ({ showHidden = true, depth = null, colors = true } = options)
+    ({ showHidden = true, depth = null, colors = true } = opt)
   )
-  if (!options.quiet) {
-    console.log(result)
+  if (!opt.quiet) {
+    console.info(result)
   }
   return result
 }
@@ -255,8 +258,8 @@ extras.clean = function (data, ...types) {
 // Get base and extension
 extras.basext = function (file) {
   var name = path.basename(file)
-  let base = name
-  let ext = ''
+  var base = name
+  var ext = ''
   if (name.includes('.')) {
     base = name.split('.').slice(0, -1).join('.')
     ext = name.split('.').slice(-1).join('')
@@ -338,7 +341,7 @@ extras.edit = function (file, fn) {
 
 // Exit program
 extras.exit = function (msg, code = 1) {
-  console.log(msg)
+  console.info(msg)
   process.exit(code)
 }
 
@@ -413,8 +416,8 @@ extras.isSymlink = function (file) {
 }
 
 // Run command
-extras.run = function (command, options = {}) {
-  return sh.exec(command, options)
+extras.run = function (command, opt = {}) {
+  return exec(command, opt)
 }
 
 // Make directory
@@ -438,7 +441,7 @@ extras.rename = function (from, to) {
 
 // Resolve path
 extras.resolve = function (...dirs) {
-  let file = dirs.join(path.sep)
+  var file = dirs.join(path.sep)
   if (file.startsWith(`.${path.sep}`)) {
     file = file.replace('.', process.cwd())
   } else if (file.startsWith('~')) {
@@ -487,7 +490,7 @@ extras.sleep = function (s = 1) {
 
 // Env
 extras.env = function (file, mode) {
-  let content = {}
+  var content = {}
   if (extras.exist(file)) {
     content = extras.read(file)
   }

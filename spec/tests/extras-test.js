@@ -1,10 +1,10 @@
 var extras = require('../../index.js')
 var os = require('os')
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
+var util = require('util')
+var exec = require('child_process').execSync
 
 setup(async function () {
-  await exec('rm -rf spec/files')
+  exec('rm -rf spec/files')
 })
 
 it('should format a string', ({ t }) => {
@@ -308,8 +308,8 @@ it('should generate a hex', ({ t }) => {
 })
 
 it('should copy files', async ({ t }) => {
-  await exec('mkdir spec/files')
-  await exec('touch spec/files/file1.json')
+  exec('mkdir spec/files')
+  exec('touch spec/files/file1.json')
 
   var result = extras.copy('spec/files/file1.json', 'spec/files/file2.json')
 
@@ -317,20 +317,20 @@ it('should copy files', async ({ t }) => {
   t.equal(result.stderr, null)
   t.equal(result.code, 0)
 
-  result = await exec('ls spec/files')
-  result = result.stdout.split('\n').filter(Boolean)
+  result = exec('ls spec/files').toString().trim()
+  result = result.split('\n').filter(Boolean)
   t.deepStrictEqual(result, ['file1.json', 'file2.json'])
 })
 
 it('should run command', async ({ t }) => {
-  await exec('mkdir spec/files')
-  await exec('mkdir spec/files/dir1')
+  exec('mkdir spec/files')
+  exec('mkdir spec/files/dir1')
 
   var result = extras.run('ls spec/files', { silent: true })
-  t.equal(result.stdout.trim(), 'dir1')
+  t.equal(result.trim(), 'dir1')
 
-  result = await exec('ls spec/files')
-  result = result.stdout.split('\n').filter(Boolean)
+  result = exec('ls spec/files').toString().trim()
+  result = result.split('\n').filter(Boolean)
   t.deepStrictEqual(result, ['dir1'])
 })
 
@@ -340,37 +340,37 @@ it('should create dir', async ({ t }) => {
   t.equal(result.stderr, null)
   t.equal(result.code, 0)
 
-  result = await exec('ls spec/files')
-  result = result.stdout.split('\n').filter(Boolean)
+  result = exec('ls spec/files').toString().trim()
+  result = result.split('\n').filter(Boolean)
   t.deepStrictEqual(result, ['dir1', 'dir2'])
 })
 
 it('should remove dir', async ({ t }) => {
-  await exec('mkdir spec/files')
-  await exec('mkdir spec/files/dir1')
-  await exec('mkdir spec/files/dir2')
+  exec('mkdir spec/files')
+  exec('mkdir spec/files/dir1')
+  exec('mkdir spec/files/dir2')
 
   var result = extras.rmdir('spec/files/dir1', 'spec/files/dir2')
   t.equal(result.stdout, '')
   t.equal(result.stderr, null)
   t.equal(result.code, 0)
 
-  result = await exec('ls spec/files')
-  result = result.stdout.split('\n').filter(Boolean)
+  result = exec('ls spec/files').toString().trim()
+  result = result.split('\n').filter(Boolean)
   t.deepStrictEqual(result, [])
 })
 
 it('should rename file', async ({ t }) => {
-  await exec('mkdir spec/files')
-  await exec('touch spec/files/file1.json')
+  exec('mkdir spec/files')
+  exec('touch spec/files/file1.json')
 
   var result = extras.rename('spec/files/file1.json', 'spec/files/file2.json')
   t.equal(result.stdout, '')
   t.equal(result.stderr, null)
   t.equal(result.code, 0)
 
-  result = await exec('ls spec/files')
-  result = result.stdout.split('\n').filter(Boolean)
+  result = exec('ls spec/files').toString().trim()
+  result = result.split('\n').filter(Boolean)
   t.deepStrictEqual(result, ['file2.json'])
 })
 
