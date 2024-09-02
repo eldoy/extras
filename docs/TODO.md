@@ -1,2 +1,6 @@
 - [ ] Deprecate get, then remove, use exec instead
 - [ ] Deprecate run, then remove, use exec instead
+- [ ] Deprecate cp, mkdir, mv, rm, use exec instead
+- [ ] Add x as alias for exec?
+- [ ] Splat lodash, remove from top
+- [ ] More flexible regexp, exact and partial (^-$)
