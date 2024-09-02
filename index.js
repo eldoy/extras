@@ -1,21 +1,23 @@
-var fs = require('fs')
-var path = require('path')
-var os = require('os')
-var util = require('util')
-var crypto = require('crypto')
+var fs = require('node:fs')
+var path = require('node:path')
+var os = require('node:os')
+var util = require('node:util')
+var crypto = require('node:crypto')
+var readline = require('node:readline')
+
 var lodash = require('lodash')
 var { v4: uuidv4 } = require('uuid')
 var cuid = require('@paralleldrive/cuid2').createId
 var bcrypt = require('bcryptjs')
 var yaml = require('js-yaml')
-var readline = require('readline')
+
 var spawn = require('./lib/spawn.js')
-var sh = require('./lib/sh.js')
 var exec = require('./lib/exec.js')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
 var extras = {}
+
 extras.NODE_EXTENSIONS = NODE_EXTENSIONS
 extras.regexp = {}
 extras.regexp.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -38,6 +40,13 @@ extras.lodash = lodash
 extras.yaml = yaml
 extras.spawn = spawn
 extras.exec = exec
+
+// Alias for exec for legacy apps
+extras.run = util.deprecate(
+  exec,
+  `run is deprecated, use exec instead`,
+  `Deprecation API`
+)
 
 extras.hash = function (str, saltRounds = 10) {
   return bcrypt.hashSync(String(str), saltRounds)
@@ -68,16 +77,26 @@ extras.isRegExp = function (str) {
 }
 
 extras.isDate = function (str) {
-  return extras.regexp.date.test(String(str))
+  if (typeof str == 'string') {
+    return extras.regexp.date.test(String(str))
+  }
+  return lodash.isDate(str)
 }
 
 extras.isURL = function (str) {
   return extras.regexp.url.test(String(str))
 }
 
-extras.parseBool = function (v) {
+extras.isBool = function (v) {
   return ['false', 'null', 'NaN', 'undefined', '0'].includes(v) ? false : !!v
 }
+
+// Alias for isBool for legacy apps
+extras.parseBool = util.deprecate(
+  extras.isBool,
+  `parseBool is deprecated, use isBool instead`,
+  `Deprecation API`
+)
 
 // Find object type
 extras.type = function (obj) {
@@ -345,11 +364,6 @@ extras.exit = function (msg, code = 1) {
   process.exit(code)
 }
 
-// Get command output
-extras.get = function (cmd) {
-  return extras.run(cmd, { silent: true }).stdout.trim()
-}
-
 // Get terminal input
 extras.input = async function (prompt = '> ', opt = {}) {
   var rl = readline.createInterface({
@@ -376,13 +390,6 @@ extras.key = function (fn) {
 extras.dir = function (file) {
   file = extras.resolve(file)
   return fs.readdirSync(file)
-}
-
-// Copy files
-extras.copy = function (from, to) {
-  from = extras.resolve(from)
-  to = extras.resolve(to)
-  return sh.cp('-R', from, to)
 }
 
 // Is directory?
@@ -412,30 +419,6 @@ extras.isSymlink = function (file) {
     return fs.lstatSync(file).isSymbolicLink()
   } catch (e) {
     return false
-  }
-}
-
-// Run command
-extras.run = function (command, opt = {}) {
-  return exec(command, opt)
-}
-
-// Make directory
-extras.mkdir = function (...dirs) {
-  return sh.mkdir('-p', ...dirs)
-}
-
-// Remove directory
-extras.rmdir = function (...dirs) {
-  return sh.rm('-rf', ...dirs)
-}
-
-// Rename file
-extras.rename = function (from, to) {
-  from = extras.resolve(from)
-  to = extras.resolve(to)
-  if (extras.exist(from)) {
-    return sh.mv(from, to)
   }
 }
 
