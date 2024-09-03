@@ -349,7 +349,7 @@ extras.write = function (file, content) {
     }
   }
   var dirname = path.dirname(file)
-  extras.mkdir(dirname)
+  extras.exec(`mkdir -p ${dirname}`)
   return fs.writeFileSync(file, content)
 }
 
