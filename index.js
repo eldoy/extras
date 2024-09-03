@@ -11,7 +11,6 @@ var cuid = require('@paralleldrive/cuid2').createId
 var bcrypt = require('bcryptjs')
 var yaml = require('js-yaml')
 
-var spawn = require('./lib/spawn.js')
 var exec = require('./lib/exec.js')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
@@ -38,7 +37,6 @@ extras.uuid = uuidv4
 extras.cuid = cuid
 extras.lodash = lodash
 extras.yaml = yaml
-extras.spawn = spawn
 extras.exec = exec
 
 // Alias for exec for legacy apps
@@ -211,7 +209,7 @@ extras.convert = function (v, type) {
     case 'date':
       return new Date(v)
     case 'boolean':
-      return extras.parseBool(v)
+      return extras.isBool(v)
     default:
       return v
   }

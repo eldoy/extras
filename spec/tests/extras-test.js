@@ -1,6 +1,6 @@
 var extras = require('../../index.js')
-var os = require('os')
-var util = require('util')
+var os = require('node:os')
+var util = require('node:util')
 
 it('should format a string', ({ t }) => {
   var result = extras.format('hello')

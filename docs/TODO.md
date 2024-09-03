@@ -1,6 +1,9 @@
-- [ ] Deprecate get, then remove, use exec instead
-- [ ] Deprecate run, then remove, use exec instead
-- [ ] Deprecate cp, mkdir, mv, rm, use exec instead
-- [ ] Add x as alias for exec?
+# TODO
+
+https://github.com/eldoy/extras/issues
+
+- [x] Deprecate get, then remove, use exec instead
+- [x] Deprecate run, then remove, use exec instead
 - [ ] Splat lodash, remove from top
 - [ ] More flexible regexp, exact and partial (^-$)
+- [ ] Refactor spawn return signature, just return process?
