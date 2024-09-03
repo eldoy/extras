@@ -40,9 +40,9 @@ extras.yaml = yaml
 extras.exec = function (cmd, opt = {}) {
   opt.encoding ??= 'utf-8'
   try {
-    var result = execSync(cmd, opt)
-    if (!opt.silent) {
-      console.info((result || '').toString())
+    var result = execSync(cmd, opt).toString().trim()
+    if (result && !opt.silent) {
+      console.info(result)
     }
   } catch (e) {
     var result = e.stdio || e.stderr || ''
