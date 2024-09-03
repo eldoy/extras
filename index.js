@@ -491,14 +491,4 @@ extras.env = function (file, mode) {
   return content
 }
 
-// Encode
-extras.encode = function (string) {
-  return Buffer.from(string).toString('base64')
-}
-
-// Decode
-extras.decode = function (string) {
-  return Buffer.from(string, 'base64').toString('ascii')
-}
-
 module.exports = extras

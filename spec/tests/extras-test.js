@@ -306,13 +306,3 @@ it('should exec command', async ({ t }) => {
   var result = extras.exec('ls -la', { silent: true })
   t.ok(result.startsWith('total'))
 })
-
-it('should encode', async ({ t }) => {
-  var result = extras.encode('Hello World')
-  t.equal(result, 'SGVsbG8gV29ybGQ=')
-})
-
-it('should decode', async ({ t }) => {
-  var result = extras.decode('SGVsbG8gV29ybGQ=')
-  t.equal(result, 'Hello World')
-})
