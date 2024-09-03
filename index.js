@@ -4,14 +4,13 @@ var os = require('node:os')
 var util = require('node:util')
 var crypto = require('node:crypto')
 var readline = require('node:readline')
+var { execSync } = require('node:child_process')
 
 var lodash = require('lodash')
 var { v4: uuidv4 } = require('uuid')
 var cuid = require('@paralleldrive/cuid2').createId
 var bcrypt = require('bcryptjs')
 var yaml = require('js-yaml')
-
-var exec = require('./lib/exec.js')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
@@ -37,11 +36,23 @@ extras.uuid = uuidv4
 extras.cuid = cuid
 extras.lodash = lodash
 extras.yaml = yaml
-extras.exec = exec
+
+extras.exec = function (cmd, opt = {}) {
+  opt.encoding ??= 'utf-8'
+  try {
+    var result = execSync(cmd, opt)
+    if (!opt.silent) {
+      console.info((result || '').toString())
+    }
+  } catch (e) {
+    var result = e.stdio || e.stderr || ''
+  }
+  return result.trim()
+}
 
 // Alias for exec for legacy apps
 extras.run = util.deprecate(
-  exec,
+  extras.exec,
   `run is deprecated, use exec instead`,
   `Deprecation API`
 )
