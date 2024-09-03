@@ -434,13 +434,13 @@ extras.resolve = function (...dirs) {
 }
 
 // Walk directory tree
-extras.walk = function (dir, fn) {
-  extras.dir(dir).forEach((f) => {
-    var file = path.join(dir, f)
+extras.walk = function (dirname, fn) {
+  extras.dir(dirname).forEach((f) => {
+    var file = path.join(dirname, f)
     if (extras.isDir(file)) {
       extras.walk(file, fn)
     } else {
-      fn(file, dir)
+      fn(file, dirname)
     }
   })
 }
@@ -488,7 +488,6 @@ extras.env = function (file, mode) {
       })
     }
   }
-
   return content
 }
 
