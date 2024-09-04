@@ -57,6 +57,19 @@ extras.run = util.deprecate(
   `Deprecation API`
 )
 
+// Alias for exec that captures output
+extras.capture = function (cmd, opt = {}) {
+  opt.stdio = 'pipe'
+  return extras.exec(cmd, opt)
+}
+
+// Alias for capture for legacy apps
+extras.get = util.deprecate(
+  extras.capture,
+  `get is deprecated, use capture instead`,
+  `Deprecation API`
+)
+
 extras.hash = function (str, saltRounds = 10) {
   return bcrypt.hashSync(String(str), saltRounds)
 }

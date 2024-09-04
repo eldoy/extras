@@ -306,3 +306,8 @@ it('should exec command', async ({ t }) => {
   var result = extras.exec('ls -la', { stdio: 'pipe' })
   t.ok(result.startsWith('total'))
 })
+
+it('should capture command', async ({ t }) => {
+  var result = extras.capture('ls -la')
+  t.ok(result.startsWith('total'))
+})
