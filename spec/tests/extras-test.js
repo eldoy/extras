@@ -303,6 +303,6 @@ it('should generate a hex', ({ t }) => {
 })
 
 it('should exec command', async ({ t }) => {
-  var result = extras.exec('ls -la', { silent: true })
+  var result = extras.exec('ls -la', { stdio: 'pipe' })
   t.ok(result.startsWith('total'))
 })
