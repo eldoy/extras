@@ -38,16 +38,23 @@ extras.lodash = lodash
 extras.yaml = yaml
 
 extras.exec = function (cmd, opt = {}) {
-  opt.encoding ??= 'utf-8'
+  opt = {
+    encoding: 'utf8',
+    stdio: opt.silent ? 'pipe' : ['inherit', 'pipe', 'pipe'],
+    ...opt
+  }
   try {
-    var result = execSync(cmd, opt).toString().trim()
-    if (result && !opt.silent) {
-      console.info(result)
+    var output = execSync(cmd, opt).toString().trim()
+    if (!opt.silent) {
+      console.info(output)
     }
   } catch (e) {
-    var result = e.stdio || e.stderr || ''
+    var output = (e.stdout || e.stderr || '').toString().trim()
+    if (!opt.silent) {
+      console.error(output)
+    }
   }
-  return result.trim()
+  return output
 }
 
 // Alias for exec for legacy apps
