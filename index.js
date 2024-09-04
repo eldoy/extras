@@ -169,7 +169,7 @@ extras.inspect = function (obj, opt = {}) {
     ({ showHidden = true, depth = null, colors = true } = opt)
   )
   if (!opt.quiet) {
-    console.info(result)
+    console.log(result)
   }
   return result
 }
@@ -382,7 +382,7 @@ extras.edit = function (file, fn) {
 
 // Exit program
 extras.exit = function (msg, code = 1) {
-  console.info(msg)
+  console.log(msg)
   process.exit(code)
 }
 
