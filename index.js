@@ -42,13 +42,11 @@ extras.exec = function (cmd, opt = {}) {
   opt.stdio ??= 'inherit'
   try {
     var output = execSync(cmd, opt)
-    if (output) {
-      return output.toString().trim()
-    }
   } catch (e) {
-    var out = e.stdout?.toString()
-    var err = e.stderr?.toString()
-    return (out || err || '').trim()
+    var output = e.stdout?.toString() || e.stderr?.toString()
+  }
+  if (output) {
+    return output.toString().trim()
   }
 }
 
