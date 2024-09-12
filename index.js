@@ -63,13 +63,6 @@ extras.capture = function (cmd, opt = {}) {
   return extras.exec(cmd, opt)
 }
 
-// Alias for capture for legacy apps
-extras.get = util.deprecate(
-  extras.capture,
-  `get is deprecated, use capture instead`,
-  `Deprecation API`
-)
-
 extras.hash = function (str, saltRounds = 10) {
   return bcrypt.hashSync(String(str), saltRounds)
 }
@@ -94,15 +87,18 @@ extras.isId = function (str) {
   return extras.regexp.id.test(String(str))
 }
 
-extras.isRegExp = function (str) {
-  return extras.regexp.reg.test(String(str))
+extras.isRegExp = function (obj) {
+  if (typeof obj == 'string') {
+    return extras.regexp.reg.test(obj)
+  }
+  return tools.isRegExp(obj)
 }
 
-extras.isDate = function (str) {
-  if (typeof str == 'string') {
-    return extras.regexp.date.test(String(str))
+extras.isDate = function (obj) {
+  if (typeof obj == 'string') {
+    return extras.regexp.date.test(obj)
   }
-  return lodash.isDate(str)
+  return lodash.isDate(obj)
 }
 
 extras.isURL = function (str) {
@@ -112,13 +108,6 @@ extras.isURL = function (str) {
 extras.isBool = function (v) {
   return ['false', 'null', 'NaN', 'undefined', '0'].includes(v) ? false : !!v
 }
-
-// Alias for isBool for legacy apps
-extras.parseBool = util.deprecate(
-  extras.isBool,
-  `parseBool is deprecated, use isBool instead`,
-  `Deprecation API`
-)
 
 // Find object type
 extras.type = function (obj) {
@@ -174,13 +163,16 @@ extras.inspect = function (obj, opt = {}) {
   return result
 }
 
-// Trim strings in object
-extras.trim = function (obj) {
+// Trim strings in objects or trim
+extras.trim = function (obj, chars = '') {
+  if (typeof obj == 'string') {
+    return _.trim(obj, chars)
+  }
   for (var key in obj) {
-    if (typeof obj[key] === 'object') {
-      extras.trim(obj[key])
-    } else if (typeof obj[key] === 'string') {
-      obj[key] = obj[key].trim()
+    if (typeof obj[key] == 'object') {
+      trim(obj[key], chars)
+    } else if (typeof obj[key] == 'string') {
+      obj[key] = _.trim(obj[key], chars)
     }
   }
 }
@@ -193,16 +185,16 @@ extras.strip = function (str, sep = '\n') {
     .join(sep)
 }
 
-// Transform object string values to Javascript native objects
+// Convert object string values to Javascript native objects
 extras.transform = function (obj, opt = {}) {
   var simple = typeof obj != 'object'
   if (simple) obj = [obj]
 
   function build(obj) {
     for (var k in obj) {
-      if (obj[k] && typeof obj[k] === 'object') {
+      if (obj[k] && typeof obj[k] == 'object') {
         extras.transform(obj[k])
-      } else if (typeof obj[k] === 'string') {
+      } else if (typeof obj[k] == 'string') {
         obj[k] = obj[k].trim()
         var m = obj[k].match(extras.regexp.reg)
         if (m) {
