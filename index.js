@@ -500,4 +500,8 @@ extras.env = function (file, mode) {
   return content
 }
 
+extras.json = function (obj) {
+  return JSON.stringify(obj, null, 2)
+}
+
 module.exports = extras
