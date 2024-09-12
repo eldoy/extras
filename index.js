@@ -14,7 +14,9 @@ var yaml = require('js-yaml')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
 
-var extras = {}
+var extras = { ...lodash }
+delete extras._
+delete extras.VERSION
 
 extras.NODE_EXTENSIONS = NODE_EXTENSIONS
 extras.regexp = {}
@@ -43,7 +45,7 @@ extras.exec = function (cmd, opt = {}) {
   try {
     var output = execSync(cmd, opt)
   } catch (e) {
-    var output = e.stdout?.toString() || e.stderr?.toString()
+    var output = (e.stdout || e.stderr || '').toString()
   }
   if (output) {
     return output.toString().trim()
@@ -87,16 +89,8 @@ extras.isId = function (str) {
   return extras.regexp.id.test(String(str))
 }
 
-extras.isRegExp = function (obj) {
-  return lodash.isRegExp(obj)
-}
-
 extras.isRegExpString = function (str) {
   return extras.regexp.reg.test(String(str))
-}
-
-extras.isDate = function (obj) {
-  return lodash.isDate(obj)
 }
 
 extras.isDateString = function (str) {
@@ -165,14 +159,11 @@ extras.inspect = function (obj, opt = {}) {
   return result
 }
 
-// Trim strings in objects or trim
-extras.trim = function (obj, chars = '') {
-  if (typeof obj == 'string') {
-    return lodash.trim(obj, chars)
-  }
+// Trim strings in objects
+extras.deepTrim = function (obj, chars = '') {
   for (var key in obj) {
     if (typeof obj[key] == 'object') {
-      extras.trim(obj[key], chars)
+      extras.deepTrim(obj[key], chars)
     } else if (typeof obj[key] == 'string') {
       obj[key] = lodash.trim(obj[key], chars)
     }
@@ -202,7 +193,7 @@ extras.unstring = function (obj, opt = {}) {
         if (m) {
           obj[k] = new RegExp(m[1], m[2])
         }
-        if (extras.isDate(obj[k]) && Date.parse(obj[k])) {
+        if (extras.isDateString(obj[k]) && Date.parse(obj[k])) {
           obj[k] = new Date(obj[k])
         }
       }
