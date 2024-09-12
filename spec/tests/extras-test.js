@@ -1,6 +1,7 @@
 var extras = require('../../index.js')
 var os = require('node:os')
 var util = require('node:util')
+var path = require('node:path')
 var lodash = require('lodash')
 
 it('should format a string', ({ t }) => {
@@ -108,14 +109,25 @@ it('should resolve paths', ({ t }) => {
   var result = extras.resolve(__dirname)
   t.equal(result, __dirname)
 
-  result = extras.resolve('..', 'test')
+  var result = extras.resolve(__filename)
+  t.equal(result, __filename)
+
+  var root = process.cwd()
+
+  result = extras.resolve('../test')
   t.equal(result.endsWith('/test'), true)
 
   result = extras.resolve('~')
   t.equal(result, os.homedir())
 
   result = extras.resolve('test')
-  t.equal(result.endsWith('/test'), true)
+  t.equal(result, `${root}/test`)
+
+  result = extras.resolve('@/hello')
+  t.equal(result, `${root}/hello`)
+
+  result = extras.resolve('./hello')
+  t.equal(result, `${root}/hello`)
 })
 
 it('should read files', ({ t }) => {

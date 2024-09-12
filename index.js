@@ -430,15 +430,15 @@ extras.isSymlink = function (file) {
 }
 
 // Resolve path
-extras.resolve = function (...dirs) {
-  var file = dirs.join(path.sep)
-  if (file.startsWith(`.${path.sep}`)) {
-    file = file.replace('.', process.cwd())
-  } else if (file.startsWith('~')) {
+extras.resolve = function (...files) {
+  var file = files.join(path.sep)
+
+  if (file.startsWith('~')) {
     file = file.replace('~', os.homedir())
-  } else if (!file.startsWith(path.sep)) {
-    file = path.join(process.cwd(), file)
+  } else if (file.startsWith('@')) {
+    file = file.replace('@', process.cwd())
   }
+
   return path.resolve(file)
 }
 
