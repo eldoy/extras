@@ -31,52 +31,52 @@ it('should format a string', ({ t }) => {
   t.equal(result, 'hello true')
 })
 
-it('should transform a string', ({ t }) => {
+it('should unstring a string', ({ t }) => {
   var params = { hello: 'something' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(params.hello, 'something')
 
   params = { hello: 'Hello! 2' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(params.hello, 'Hello! 2')
 
   params = { hello: '2020-11-02T08:22:31.017Z' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(typeof params.hello.getMonth, 'function')
 
   params = { hello: '2020-11-02T08:22:31Z' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(typeof params.hello.getMonth, 'function')
 
   params = { hello: '2022-03-18T08:24:34' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(typeof params.hello.getMonth, 'function')
 
   params = { hello: '2024-07-21T13:59:15.307' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(typeof params.hello.getMonth, 'function')
 
   params = { val: '%r/hello/' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(extras.type(params.val), 'regexp')
 
-  result = extras.transform('hello')
+  result = extras.unstring('hello')
   t.equal(result, 'hello')
 
   params = { val: '5' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(params.val, '5')
 
   params = { val: 'null' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(params.val, 'null')
 
   params = { val: 'true' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(params.val, 'true')
 
   params = { val: 'false' }
-  extras.transform(params)
+  extras.unstring(params)
   t.equal(params.val, 'false')
 })
 

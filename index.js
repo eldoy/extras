@@ -185,15 +185,15 @@ extras.strip = function (str, sep = '\n') {
     .join(sep)
 }
 
-// Convert object string values to Javascript native objects
-extras.transform = function (obj, opt = {}) {
+// Change string values in objects into native values
+extras.unstring = function (obj, opt = {}) {
   var simple = typeof obj != 'object'
   if (simple) obj = [obj]
 
   function build(obj) {
     for (var k in obj) {
       if (obj[k] && typeof obj[k] == 'object') {
-        extras.transform(obj[k])
+        extras.unstring(obj[k])
       } else if (typeof obj[k] == 'string') {
         obj[k] = obj[k].trim()
         var m = obj[k].match(extras.regexp.reg)
