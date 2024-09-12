@@ -88,17 +88,19 @@ extras.isId = function (str) {
 }
 
 extras.isRegExp = function (obj) {
-  if (typeof obj == 'string') {
-    return extras.regexp.reg.test(obj)
-  }
-  return tools.isRegExp(obj)
+  return lodash.isRegExp(obj)
+}
+
+extras.isRegExpString = function (str) {
+  return extras.regexp.reg.test(String(str))
 }
 
 extras.isDate = function (obj) {
-  if (typeof obj == 'string') {
-    return extras.regexp.date.test(obj)
-  }
   return lodash.isDate(obj)
+}
+
+extras.isDateString = function (str) {
+  return extras.regexp.date.test(String(str))
 }
 
 extras.isURL = function (str) {
@@ -166,13 +168,13 @@ extras.inspect = function (obj, opt = {}) {
 // Trim strings in objects or trim
 extras.trim = function (obj, chars = '') {
   if (typeof obj == 'string') {
-    return _.trim(obj, chars)
+    return lodash.trim(obj, chars)
   }
   for (var key in obj) {
     if (typeof obj[key] == 'object') {
-      trim(obj[key], chars)
+      extras.trim(obj[key], chars)
     } else if (typeof obj[key] == 'string') {
-      obj[key] = _.trim(obj[key], chars)
+      obj[key] = lodash.trim(obj[key], chars)
     }
   }
 }
