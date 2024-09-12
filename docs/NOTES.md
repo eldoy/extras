@@ -10,3 +10,5 @@ These crash with lodash:
   - support both string and object
 { key: 'transform' }
   - rename to convert
+
+Complete.
