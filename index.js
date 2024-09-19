@@ -504,4 +504,24 @@ extras.json = function (obj) {
   return JSON.stringify(obj, null, 2)
 }
 
+extras.lazyload = function (moduleName) {
+  var module
+  return new Proxy(
+    function () {
+      if (!module) {
+        module = require(moduleName)
+      }
+      return module.apply(this, arguments)
+    },
+    {
+      get: function (target, name) {
+        if (!module) {
+          module = require(moduleName)
+        }
+        return module[name]
+      }
+    }
+  )
+}
+
 module.exports = extras
