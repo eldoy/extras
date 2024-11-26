@@ -10,55 +10,9 @@ var bcrypt = require('bcryptjs')
 var yaml = require('js-yaml')
 var readline = require('readline')
 var { spawnSync } = require('child_process')
+var child = require('child_process')
 
 var NODE_EXTENSIONS = ['js', 'json', 'mjs', 'cjs', 'wasm', 'node']
-
-function spawn(cmd, options, ...args) {
-  if (typeof options == 'string') {
-    args = [options, ...args]
-    options = null
-  }
-
-  var process = spawnSync(cmd, args, {
-    shell: true,
-    encoding: 'utf-8'
-  })
-
-  var { status, stdout, stderr } = process
-
-  if (options?.silent != true) {
-    if (stdout) {
-      console.log(stdout)
-    }
-    if (stderr) {
-      console.log(stderr)
-    }
-  }
-
-  return {
-    stdout: stdout?.toString(),
-    stderr: status ? stderr?.toString() : null,
-    code: status
-  }
-}
-
-var sh = {
-  cp: function (options = '', from, to) {
-    return spawn('cp', { silent: true }, options, from, to)
-  },
-  exec: function (command, options) {
-    return spawn(command, options)
-  },
-  mkdir: function (options = '', ...files) {
-    return spawn('mkdir', { silent: true }, options, ...files)
-  },
-  mv: function (from, to) {
-    return spawn('mv', { silent: true }, from, to)
-  },
-  rm: function (options = '', ...files) {
-    return spawn('rm', { silent: true }, options, ...files)
-  }
-}
 
 var extras = {}
 extras.NODE_EXTENSIONS = NODE_EXTENSIONS
@@ -383,33 +337,6 @@ extras.exit = function (msg, code = 1) {
   process.exit(code)
 }
 
-// Get command output
-extras.get = function (cmd) {
-  return extras.run(cmd, { silent: true }).stdout.trim()
-}
-
-// Get terminal input
-extras.input = async function (prompt = '> ', opt = {}) {
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    ...opt
-  })
-  return await new Promise(function (resolve) {
-    rl.question(prompt, function (str) {
-      rl.close()
-      resolve(str)
-    })
-  })
-}
-
-// Get keypress from stdin
-extras.key = function (fn) {
-  readline.emitKeypressEvents(process.stdin)
-  process.stdin.setRawMode(true)
-  process.stdin.on('keypress', fn)
-}
-
 // Read directory
 extras.dir = function (file) {
   file = extras.resolve(file)
@@ -420,7 +347,7 @@ extras.dir = function (file) {
 extras.copy = function (from, to) {
   from = extras.resolve(from)
   to = extras.resolve(to)
-  return sh.cp('-R', from, to)
+  return extras.run(`cp -r ${from} ${to}`)
 }
 
 // Is directory?
@@ -453,19 +380,61 @@ extras.isSymlink = function (file) {
   }
 }
 
-// Run command
-extras.run = function (command, options = {}) {
-  return sh.exec(command, options)
+// Run a command, async
+extras.run = function (cmd = '', opt = {}) {
+  var options = { shell: true, stdio: 'inherit' }
+  if (opt.quiet || opt.silent) {
+    options.stdio = 'ignore'
+  }
+  return child.spawnSync(cmd, [], options)
+}
+
+// Get command output
+extras.get = function (cmd, opt = {}) {
+  var x = child.spawnSync(cmd, [], { shell: true, stdio: 'pipe' })
+
+  var stdout = x.stdout?.toString().trim() || ''
+  var stderr = x.stderr?.toString().trim() || ''
+  var output = stdout || stderr || ''
+  var quiet = opt.silent || opt.quiet
+
+  if (output && typeof quiet != 'undefined' && !quiet) {
+    process.stdout.write(output)
+  }
+
+  return output
+}
+
+// Get terminal input
+extras.input = async function (prompt = '> ', opt = {}) {
+  var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    ...opt
+  })
+  return await new Promise(function (resolve) {
+    rl.question(prompt, function (str) {
+      rl.close()
+      resolve(str)
+    })
+  })
+}
+
+// Get keypress from stdin
+extras.key = function (fn) {
+  readline.emitKeypressEvents(process.stdin)
+  process.stdin.setRawMode(true)
+  process.stdin.on('keypress', fn)
 }
 
 // Make directory
 extras.mkdir = function (...dirs) {
-  return sh.mkdir('-p', ...dirs)
+  return extras.run(`mkdir -p ${dirs.join(' ')}`)
 }
 
 // Remove directory
 extras.rmdir = function (...dirs) {
-  return sh.rm('-rf', ...dirs)
+  return extras.run(`rm -rf ${dirs.join(' ')}`)
 }
 
 // Rename file
@@ -473,7 +442,7 @@ extras.rename = function (from, to) {
   from = extras.resolve(from)
   to = extras.resolve(to)
   if (extras.exist(from)) {
-    return sh.mv(from, to)
+    return extras.run(`mv ${from} ${to}`)
   }
 }
 

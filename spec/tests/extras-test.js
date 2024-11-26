@@ -1,7 +1,7 @@
 var extras = require('../../index.js')
 var os = require('os')
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
+var util = require('util')
+var exec = util.promisify(require('child_process').exec)
 
 setup(async function () {
   await exec('rm -rf spec/files')
@@ -313,9 +313,7 @@ it('should copy files', async ({ t }) => {
 
   var result = extras.copy('spec/files/file1.json', 'spec/files/file2.json')
 
-  t.equal(result.stdout, '')
-  t.equal(result.stderr, null)
-  t.equal(result.code, 0)
+  t.equal(result.status, 0)
 
   result = await exec('ls spec/files')
   result = result.stdout.split('\n').filter(Boolean)
@@ -327,18 +325,21 @@ it('should run command', async ({ t }) => {
   await exec('mkdir spec/files/dir1')
 
   var result = extras.run('ls spec/files', { silent: true })
-  t.equal(result.stdout.trim(), 'dir1')
 
-  result = await exec('ls spec/files')
-  result = result.stdout.split('\n').filter(Boolean)
-  t.deepStrictEqual(result, ['dir1'])
+  t.equal(result.status, 0)
+})
+
+it('should capture command output', async ({ t }) => {
+  await exec('mkdir spec/files')
+  await exec('mkdir spec/files/dir1')
+
+  var result = extras.get('ls spec/files')
+  t.equal(result, 'dir1')
 })
 
 it('should create dir', async ({ t }) => {
   var result = extras.mkdir('spec/files/dir1', './spec/files/dir2')
-  t.equal(result.stdout, '')
-  t.equal(result.stderr, null)
-  t.equal(result.code, 0)
+  t.equal(result.status, 0)
 
   result = await exec('ls spec/files')
   result = result.stdout.split('\n').filter(Boolean)
@@ -351,9 +352,7 @@ it('should remove dir', async ({ t }) => {
   await exec('mkdir spec/files/dir2')
 
   var result = extras.rmdir('spec/files/dir1', 'spec/files/dir2')
-  t.equal(result.stdout, '')
-  t.equal(result.stderr, null)
-  t.equal(result.code, 0)
+  t.equal(result.status, 0)
 
   result = await exec('ls spec/files')
   result = result.stdout.split('\n').filter(Boolean)
@@ -365,9 +364,7 @@ it('should rename file', async ({ t }) => {
   await exec('touch spec/files/file1.json')
 
   var result = extras.rename('spec/files/file1.json', 'spec/files/file2.json')
-  t.equal(result.stdout, '')
-  t.equal(result.stderr, null)
-  t.equal(result.code, 0)
+  t.equal(result.status, 0)
 
   result = await exec('ls spec/files')
   result = result.stdout.split('\n').filter(Boolean)
